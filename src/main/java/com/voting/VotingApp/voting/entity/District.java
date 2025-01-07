@@ -18,10 +18,10 @@ public class District {
     private Long districtId;
     private String districtName;
 
-    @OneToMany(mappedBy = "district")
-    private List<Constituency> constituency;
+//    @OneToMany(mappedBy = "district")
+//    private List<Constituency> constituency;
 
     @ManyToOne
-    @JoinColumn(name = "region")
+    @JoinColumn(name = "region_id")
     private Region region;
 }

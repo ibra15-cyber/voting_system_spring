@@ -1,6 +1,8 @@
 package com.voting.VotingApp.voting.entity;
 
+import com.voting.VotingApp.voting.enums.Gender;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Data
@@ -13,16 +15,22 @@ public class Voter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long voterId;
 
-    @Column(nullable = false)
+    private String voterNumber;
+//
+//    @Column(nullable = false)
+//    @NotBlank
     private String firstName;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
+//    @NotBlank
     private String lastName;
 
-    @Column(nullable = false)
-    private String gender;
+//    @NotBlank
+//    @Column(nullable = false)
+    private Gender gender;
 
-    @Column(nullable = false)
+//    @NotBlank
+//    @Column(nullable = false)
     private int age;
 
     @ManyToOne()
