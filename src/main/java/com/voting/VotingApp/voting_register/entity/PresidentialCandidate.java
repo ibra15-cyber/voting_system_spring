@@ -25,11 +25,12 @@ public class PresidentialCandidate {
     private String gender;
     private int age;
 
+    @Column(unique = true)
     private PoliticalParty politicalParty;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vote> voteList;
 
-    private BigDecimal totalVotesAttained;
+    private Long totalVotesAttained;
 
 }

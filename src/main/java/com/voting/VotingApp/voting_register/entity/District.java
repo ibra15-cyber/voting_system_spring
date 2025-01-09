@@ -32,9 +32,9 @@ public class District {
     @JoinColumn(name = "region_id")
     private Region region;
 
-    private BigDecimal districtTotalVotesCast;
+    private Long districtTotalVotesCast;
 
-    private BigDecimal districtTotalForAPresidentialCandidate;
+    private Long districtTotalForAPresidentialCandidate;
 
-    private BigDecimal districtTotalForAParliamentaryCandidate;
+    private Long districtTotalForAParliamentaryCandidate;
 }

@@ -1,12 +1,15 @@
 package com.voting.VotingApp.voting_register.service.impl;
 
 import com.voting.VotingApp.voting_register.dto.ConstituencyDTO;
+import com.voting.VotingApp.voting_register.dto.ParliamentaryCandidateDTO;
 import com.voting.VotingApp.voting_register.dto.Response;
 import com.voting.VotingApp.voting_register.entity.Constituency;
 import com.voting.VotingApp.voting_register.entity.District;
+import com.voting.VotingApp.voting_register.entity.ParliamentaryCandidate;
 import com.voting.VotingApp.voting_register.mapper.EntityDTOMapper;
 import com.voting.VotingApp.voting_register.repository.ConstituencyRepository;
 import com.voting.VotingApp.voting_register.repository.DistrictRepository;
+import com.voting.VotingApp.voting_register.repository.ParliamentaryCandidateRepository;
 import com.voting.VotingApp.voting_register.service.ConstituencyService;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +23,13 @@ public class ConstituencyServiceImp implements ConstituencyService {
     private final ConstituencyRepository constituencyRepository;
     private final DistrictRepository districtRepository;
     private final EntityDTOMapper entityDTOMapper;
+    private final ParliamentaryCandidateRepository parliamentaryCandidateRepository;
 
-    public ConstituencyServiceImp(ConstituencyRepository constituencyRepository, DistrictRepository districtRepository, EntityDTOMapper entityDTOMapper) {
+    public ConstituencyServiceImp(ConstituencyRepository constituencyRepository, DistrictRepository districtRepository, EntityDTOMapper entityDTOMapper, ParliamentaryCandidateRepository parliamentaryCandidateRepository) {
         this.constituencyRepository = constituencyRepository;
         this.districtRepository = districtRepository;
         this.entityDTOMapper = entityDTOMapper;
+        this.parliamentaryCandidateRepository = parliamentaryCandidateRepository;
     }
 
     @Override
@@ -110,5 +115,16 @@ public class ConstituencyServiceImp implements ConstituencyService {
         return Response.builder()
                 .message("Constituency successfully deleted")
                 .build();
+    }
+
+    @Override
+    public Response getParliamentaryCandidatesByConstituency(Long constituencyId) {
+        Constituency constituency = constituencyRepository.findById(constituencyId).orElseThrow(()-> new RuntimeException("Constituency does not exist"));
+
+        List<ParliamentaryCandidate> parliamentaryCandidates = parliamentaryCandidateRepository.findParliamentaryCandidateByConstituency(constituency);
+
+        List<ParliamentaryCandidateDTO> parliamentaryCandidateDTOS = parliamentaryCandidates.stream().map(entityDTOMapper::parliamentaryCandidateToParliamentaryCandidateDTO).collect(Collectors.toList());
+
+        return Response.builder().parliamentaryCandidateDTOList(parliamentaryCandidateDTOS).build();
     }
 }

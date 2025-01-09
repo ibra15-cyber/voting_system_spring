@@ -45,6 +45,7 @@ public class EntityDTOMapper {
         constituencyDTO.setDistrictId(constituency.getConstituencyId());
         constituencyDTO.setConstituencyCapital(constituency.getConstituencyCapital());
         constituencyDTO.setConstituencyElectoralCode(constituency.getConstituencyElectoralCode());
+        constituencyDTO.setConstituencyTotalVotes(constituency.getConstituencyTotalVotes());
 
         return constituencyDTO;
     }
@@ -70,8 +71,23 @@ public class EntityDTOMapper {
         parliamentaryCandidateDTO.setLastName(parliamentaryCandidate.getLastName());
         parliamentaryCandidateDTO.setGender(Gender.valueOf(parliamentaryCandidate.getGender()));
         parliamentaryCandidateDTO.setAge(parliamentaryCandidate.getAge());
+        parliamentaryCandidateDTO.setTotalVotesAttain(parliamentaryCandidate.getTotalVotesAttained());
 
         parliamentaryCandidateDTO.setConstituencyId(parliamentaryCandidate.getConstituency().getConstituencyId());
+
+        return parliamentaryCandidateDTO;
+    }
+
+    public ParliamentaryCandidateDTO presidentialCandidateToPresidentialCandidateDTO(PresidentialCandidate presidentialCandidate) {
+
+        ParliamentaryCandidateDTO parliamentaryCandidateDTO = new ParliamentaryCandidateDTO();
+
+        parliamentaryCandidateDTO.setFirstName(presidentialCandidate.getFirstName());
+        parliamentaryCandidateDTO.setLastName(presidentialCandidate.getLastName());
+        parliamentaryCandidateDTO.setGender(Gender.valueOf(presidentialCandidate.getGender()));
+        parliamentaryCandidateDTO.setAge(presidentialCandidate.getAge());
+        parliamentaryCandidateDTO.setTotalVotesAttain(presidentialCandidate.getTotalVotesAttained());
+
 
         return parliamentaryCandidateDTO;
     }

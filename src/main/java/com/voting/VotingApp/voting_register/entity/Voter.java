@@ -33,7 +33,7 @@ public class Voter {
 
 //    @NotBlank
 //    @Column(nullable = false)
-    private int age;
+    private Integer age;
 
     @ManyToOne()
     @JoinColumn(name="constituency_id")

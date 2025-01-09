@@ -1,14 +1,18 @@
 package com.voting.VotingApp.voting_register.service.impl;
 
+import com.voting.VotingApp.voting_register.dto.DistrictDTO;
 import com.voting.VotingApp.voting_register.dto.RegionDTO;
 import com.voting.VotingApp.voting_register.dto.Response;
+import com.voting.VotingApp.voting_register.entity.District;
 import com.voting.VotingApp.voting_register.entity.Region;
 import com.voting.VotingApp.voting_register.mapper.EntityDTOMapper;
+import com.voting.VotingApp.voting_register.repository.DistrictRepository;
 import com.voting.VotingApp.voting_register.repository.RegionRepository;
 import com.voting.VotingApp.voting_register.service.RegionService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RegionServiceImp implements RegionService {
@@ -16,10 +20,12 @@ public class RegionServiceImp implements RegionService {
     private final RegionRepository regionRepository;
 
     private final EntityDTOMapper entityDTOMapper;
+    private final DistrictRepository districtRepository;
 
-    public RegionServiceImp(RegionRepository regionRepository, EntityDTOMapper entityDTOMapper) {
+    public RegionServiceImp(RegionRepository regionRepository, EntityDTOMapper entityDTOMapper, DistrictRepository districtRepository) {
         this.regionRepository = regionRepository;
         this.entityDTOMapper = entityDTOMapper;
+        this.districtRepository = districtRepository;
     }
 
 
@@ -95,6 +101,24 @@ public class RegionServiceImp implements RegionService {
                 .message("Region deleted successfully!")
                 .build();
     }
+
+    @Override
+    public Response getDistrictsByRegion(Long regionId) {
+
+        Region region = regionRepository.findById(regionId)
+                .orElseThrow(()-> new RuntimeException("region does not exist"));
+
+        List<District> districts = districtRepository.findDistrictsByRegion(region);
+
+        List<DistrictDTO> districtDTOS = districts.stream().map(entityDTOMapper::mapDistrictToDistrictDTO).collect(Collectors.toList());
+
+        return Response.builder()
+                .message("Region created successfully!")
+                .regionDTO(entityDTOMapper.mapRegionToRegionDTO(region))
+                .districtDTOList(districtDTOS)
+                .build();
+    }
+
 
 
 

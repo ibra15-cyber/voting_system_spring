@@ -6,7 +6,6 @@ import com.voting.VotingApp.voting_register.entity.*;
 import com.voting.VotingApp.voting_register.mapper.EntityDTOMapper;
 import com.voting.VotingApp.voting_register.repository.ParliamentaryCandidateRepository;
 import com.voting.VotingApp.voting_register.repository.ConstituencyRepository;
-import com.voting.VotingApp.voting_register.repository.VoterRepository;
 import com.voting.VotingApp.voting_register.service.ParliamentaryCandidateService;
 import org.springframework.stereotype.Service;
 
@@ -27,90 +26,9 @@ public class ParliamentaryCandidateServiceImp implements ParliamentaryCandidateS
         this.parliamentaryCandidateRepository = parliamentaryCandidateRepository;
     }
 
-//    @Override
-//    public Response createVoter(VoterDTO voterDTO) {
-//
-//        System.out.println(voterDTO);
-//
-//        Voter newVoter = new Voter();
-//        System.out.println(voterDTO);
-//
-//        newVoter.setAge(voterDTO.getAge());
-//        newVoter.setGender((voterDTO.getGender()));
-//        newVoter.setFirstName(voterDTO.getFirstName());
-//        newVoter.setLastName(voterDTO.getLastName());
-//        newVoter.setVoterNumber(voterDTO.getVoterNumber());
-//
-//        Constituency constituency = constituencyRepository.findById(voterDTO.getConstituencyId()).orElseThrow( () -> new RuntimeException("Constituency does not exist"));
-//        newVoter.setConstituency(constituency);
-//
-//        District district = constituency.getDistrict();
-//        Region region = district.getRegion();
-//
-//
-//
-//        voterRepository.save(newVoter);
-//
-//        return Response.builder()
-//                .message("Voter created successfully!")
-//                .regionDTO( entityDTOMapper.mapRegionToRegionDTO(region))
-//                .districtDTO(entityDTOMapper.mapDistrictToDistrictDTO(district))
-//                .constituencyDTO(entityDTOMapper.mapConstituencyToContituencyDTO(constituency))
-//                .build();
-//    }
-//
-//    @Override
-//    public Response getAllVoters() {
-//        List<Voter> voters = voterRepository.findAll();
-//
-//        List<VoterDTO> voterDTOS = voters.stream().map(entityDTOMapper::mapVoterToVoterDTO).collect(Collectors.toList());
-//        return Response.builder()
-//                .voterDTOList(voterDTOS)
-//                .build();
-//    }
-//
-//    @Override
-//    public Response getVoterById(Long voterId) {
-//       Voter voter  = voterRepository.findById(voterId).orElseThrow(() -> new RuntimeException("Voter note found!"));
-//
-//        return Response.builder()
-//                .voterDTO(entityDTOMapper.mapVoterToVoterDTO(voter))
-//                .build();
-//    }
-//
-//
-//    @Override
-//    public Response updateVoter(Long voterId, VoterDTO voterDTO) {
-//        Voter voter  = voterRepository.findById(voterId).orElseThrow(() -> new RuntimeException("Voter note found!"));
-//
-//        if (voterDTO.getVoterNumber() != null ) voter.setVoterNumber(voterDTO.getVoterNumber());
-//        if (voterDTO.getAge() == voter.getAge()) voter.setAge(voterDTO.getAge());
-//        if (voterDTO.getGender() != null ) voter.setGender(voterDTO.getGender());
-//        if (voterDTO.getLastName() != null ) voter.setLastName(voterDTO.getLastName());
-//        if (voterDTO.getFirstName() != null ) voter.setFirstName(voterDTO.getFirstName());
-//
-//        voterRepository.save(voter);
-//
-//        return Response.builder()
-//                .build();
-//    }
-//
-//    @Override
-//    public Response deleteVoter(Long voterId) {
-//        Voter voter  = voterRepository.findById(voterId).orElseThrow(() -> new RuntimeException("Voter note found!"));
-//
-//        voterRepository.delete(voter);
-//
-//        return Response.builder()
-//                .message("Voter deleted successfully")
-//                .build();
-//    }
-
-
     @Override
     public Response createCandidate(ParliamentaryCandidateDTO parliamentaryCandidateDTO) {
 
-        System.out.println(parliamentaryCandidateDTO);
         ParliamentaryCandidate parliamentaryCandidate = new ParliamentaryCandidate();
 
         parliamentaryCandidate.setFirstName(parliamentaryCandidateDTO.getFirstName());
@@ -150,16 +68,46 @@ public class ParliamentaryCandidateServiceImp implements ParliamentaryCandidateS
 
     @Override
     public Response getCandidateById(Long candidateId) {
-        return null;
+       ParliamentaryCandidate parliamentaryCandidate =  parliamentaryCandidateRepository.findById(candidateId).orElseThrow(()-> new RuntimeException("Parliamentary candidate not found!"));
+
+       ParliamentaryCandidateDTO parliamentaryCandidateDTO = entityDTOMapper.parliamentaryCandidateToParliamentaryCandidateDTO(parliamentaryCandidate);
+
+        return Response.builder()
+                .parliamentaryCandidateDTO(parliamentaryCandidateDTO)
+                .build();
     }
 
     @Override
     public Response updateCandidate(Long candidateId, ParliamentaryCandidateDTO parliamentaryCandidateDTO) {
-        return null;
+        ParliamentaryCandidate parliamentaryCandidate =  parliamentaryCandidateRepository.findById(candidateId).orElseThrow(()-> new RuntimeException("Parliamentary candidate not found!"));
+
+        if (parliamentaryCandidateDTO.getFirstName() != null) parliamentaryCandidate.setFirstName(parliamentaryCandidateDTO.getFirstName());
+        if (parliamentaryCandidateDTO.getLastName() != null) parliamentaryCandidate.setLastName(parliamentaryCandidateDTO.getLastName());
+        if (parliamentaryCandidateDTO.getGender() != null) parliamentaryCandidate.setGender(String.valueOf(parliamentaryCandidateDTO.getGender()));
+        if (parliamentaryCandidateDTO.getPoliticalParty() != null) parliamentaryCandidate.setPoliticalParty(parliamentaryCandidateDTO.getPoliticalParty());
+        if (parliamentaryCandidateDTO.getAge() != null ) parliamentaryCandidate.setAge(parliamentaryCandidateDTO.getAge());
+
+        if (parliamentaryCandidateDTO.getConstituencyId() != null) {
+            Constituency constituency = constituencyRepository.findById(parliamentaryCandidateDTO.getConstituencyId()).orElseThrow(() -> new RuntimeException("Constituency not found"));
+            parliamentaryCandidate.setConstituency(constituency);
+        }
+
+        parliamentaryCandidateRepository.save(parliamentaryCandidate);
+
+        ParliamentaryCandidateDTO parliamentaryCandidateDTO1 = entityDTOMapper.parliamentaryCandidateToParliamentaryCandidateDTO(parliamentaryCandidate);
+
+
+        return Response.builder()
+                .parliamentaryCandidateDTO(parliamentaryCandidateDTO1)
+                .build();
     }
 
     @Override
     public Response deleteCandidate(Long candidateId) {
-        return null;
+        ParliamentaryCandidate parliamentaryCandidate =  parliamentaryCandidateRepository.findById(candidateId).orElseThrow(()-> new RuntimeException("Parliamentary candidate not found!"));
+
+        parliamentaryCandidateRepository.delete(parliamentaryCandidate);;
+
+        return Response.builder().message("Candidate deleted successfully!").build();
     }
 }

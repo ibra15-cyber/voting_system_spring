@@ -8,4 +8,5 @@ public class ConstituencyDTO {
     private Long districtId;
     private String constituencyElectoralCode;
     private String constituencyCapital;
+    private Long constituencyTotalVotes;
 }

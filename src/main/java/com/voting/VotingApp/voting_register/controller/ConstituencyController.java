@@ -43,4 +43,11 @@ public class ConstituencyController {
     public ResponseEntity<Response> deleteConstituency(@PathVariable("constituencyId") Long constituencyId) {
         return ResponseEntity.status(HttpStatus.OK).body(constituencyService.deleteConstituency(constituencyId));
     }
+
+
+    @GetMapping("/get-mps-by-constituency/{constituencyId}")
+    public ResponseEntity<Response> getParliamentaryCandidatesByConstituency(@PathVariable("constituencyId") Long constituencyId) {
+        return ResponseEntity.status(HttpStatus.OK).body(constituencyService.getParliamentaryCandidatesByConstituency(constituencyId));
+    }
+
 }

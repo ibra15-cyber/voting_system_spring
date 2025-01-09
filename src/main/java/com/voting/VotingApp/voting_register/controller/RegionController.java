@@ -45,4 +45,10 @@ public class RegionController {
         return ResponseEntity.status(HttpStatus.OK).body(regionService.deleteRegion(regionId));
     }
 
+
+    @GetMapping("/get-districts-by-region/{regionId}")
+    public ResponseEntity<Response> getDistrictsByRegion(@PathVariable("regionId") Long regionId) {
+        return ResponseEntity.status(HttpStatus.OK).body(regionService.getDistrictsByRegion(regionId));
+    }
+
 }

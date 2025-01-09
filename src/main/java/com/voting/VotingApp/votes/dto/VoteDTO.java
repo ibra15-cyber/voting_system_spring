@@ -7,4 +7,5 @@ public class VoteDTO {
     private Long voterId;
     private Long constituencyId;
     private Long parliamentaryCandidateId;
+    private Long presidentialCandidateId;
 }

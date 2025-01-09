@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/candidate")
+@RequestMapping("/parliamentary-candidate")
 public class ParliamentaryCandidateController {
 
     private final ParliamentaryCandidateService parliamentaryCandidateService;

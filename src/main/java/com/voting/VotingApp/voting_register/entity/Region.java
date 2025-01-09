@@ -27,11 +27,11 @@ public class Region {
     @Column(unique = true)
     private String regionalCapital;
 
-    private BigDecimal regionalTotalVotesCast;
+    private Long regionalTotalVotesCast;
 
-    private BigDecimal regionalTotalForAPresidentialCandidate;
+    private Long regionalTotalForAPresidentialCandidate;
 
-    private BigDecimal regionalTotalForAParliamentaryCandidate;
+    private Long regionalTotalForAParliamentaryCandidate;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<District> districts;

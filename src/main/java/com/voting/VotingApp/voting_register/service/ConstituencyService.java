@@ -9,4 +9,6 @@ public interface ConstituencyService {
     Response getConstituencyById(Long constituencyId);
     Response updateConstituency(Long constituencyId, ConstituencyDTO constituencyDTO);
     Response deleteConstituency(Long constituencyId);
+
+    Response getParliamentaryCandidatesByConstituency(Long constituencyId);
 }

@@ -9,4 +9,6 @@ public interface RegionService {
     Response getRegionById(Long regionId);
     Response updateRegion(Long regionId, RegionDTO regionDTO);
     Response deleteRegion(Long regionId);
+
+    Response getDistrictsByRegion(Long regionId);
 }

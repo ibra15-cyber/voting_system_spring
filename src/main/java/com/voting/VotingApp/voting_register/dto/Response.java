@@ -20,5 +20,7 @@ public class Response {
     private List<VoterDTO> voterDTOList;
     private ParliamentaryCandidateDTO parliamentaryCandidateDTO;
     private List<ParliamentaryCandidateDTO> parliamentaryCandidateDTOList;
+    private Long parliamentaryTotal;
+    private Long totalVoteCastNationwide;
 
 }

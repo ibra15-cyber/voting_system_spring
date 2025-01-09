@@ -46,4 +46,10 @@ public class DistrictController {
         return ResponseEntity.status(HttpStatus.OK).body(districtService.deleteDistrict(districtId));
     }
 
+
+    @GetMapping("/get-constituencies-by-district/{districtId}")
+    public ResponseEntity<Response> getConstituenciesByDistrict(@PathVariable("districtId") Long regionId) {
+        return ResponseEntity.status(HttpStatus.OK).body(districtService.getConstituenciesByDistrict(regionId));
+    }
+
 }

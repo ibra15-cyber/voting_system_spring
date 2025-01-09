@@ -1,10 +1,13 @@
 package com.voting.VotingApp.voting_register.service.impl;
 
+import com.voting.VotingApp.voting_register.dto.ConstituencyDTO;
 import com.voting.VotingApp.voting_register.dto.DistrictDTO;
 import com.voting.VotingApp.voting_register.dto.Response;
+import com.voting.VotingApp.voting_register.entity.Constituency;
 import com.voting.VotingApp.voting_register.entity.District;
 import com.voting.VotingApp.voting_register.entity.Region;
 import com.voting.VotingApp.voting_register.mapper.EntityDTOMapper;
+import com.voting.VotingApp.voting_register.repository.ConstituencyRepository;
 import com.voting.VotingApp.voting_register.repository.DistrictRepository;
 import com.voting.VotingApp.voting_register.repository.RegionRepository;
 import com.voting.VotingApp.voting_register.service.DistrictService;
@@ -20,11 +23,13 @@ public class DistrictServiceImp implements DistrictService {
     private final DistrictRepository districtRepository;
     private final EntityDTOMapper entityDTOMapper;
     private final RegionRepository regionRepository;
+    private final ConstituencyRepository constituencyRepository;
 
-    public DistrictServiceImp(DistrictRepository districtRepository, EntityDTOMapper entityDTOMapper, RegionRepository regionRepository) {
+    public DistrictServiceImp(DistrictRepository districtRepository, EntityDTOMapper entityDTOMapper, RegionRepository regionRepository, ConstituencyRepository constituencyRepository) {
         this.districtRepository = districtRepository;
         this.entityDTOMapper = entityDTOMapper;
         this.regionRepository = regionRepository;
+        this.constituencyRepository = constituencyRepository;
     }
 
 
@@ -110,6 +115,19 @@ public class DistrictServiceImp implements DistrictService {
 
         return Response.builder()
                 .message("District successfully deleted")
+                .build();
+    }
+
+    @Override
+    public Response getConstituenciesByDistrict(Long districtId) {
+        District district = districtRepository.findById(districtId).orElseThrow(() -> new RuntimeException("District does not exist"));
+
+        List<Constituency> constituencies = constituencyRepository.findConstituenciesByDistrict(district);
+
+        List<ConstituencyDTO> constituencyDTOS = constituencies.stream().map(entityDTOMapper::mapConstituencyToContituencyDTO).collect(Collectors.toList());
+
+        return Response.builder()
+                .constituencyDTOList(constituencyDTOS)
                 .build();
     }
 }

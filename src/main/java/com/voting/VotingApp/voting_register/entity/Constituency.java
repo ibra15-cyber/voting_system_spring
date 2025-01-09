@@ -28,13 +28,13 @@ public class Constituency {
     @Column(unique = true)
     private String constituencyCapital;
 
-    private BigDecimal constituencyTotalVotes;
+    private Long constituencyTotalVotes;
 
-    private BigDecimal constituencyTotalVotesCast;
+    private Long constituencyTotalVotesCast;
 
-    private BigDecimal constituencyTotalForAPresidentialCandidate;
+    private Long constituencyTotalForAPresidentialCandidate;
 
-    private BigDecimal constituencyTotalForAParliamentaryCandidate;
+    private Long constituencyTotalForAParliamentaryCandidate;
 
     @ManyToOne
     @JoinColumn(name = "district_id" )

@@ -9,6 +9,6 @@ public class VoterDTO {
     private String lastName;
     private Gender gender;
     private Long constituencyId;
-    private int age;
+    private Integer age;
     private String voterNumber;
 }
