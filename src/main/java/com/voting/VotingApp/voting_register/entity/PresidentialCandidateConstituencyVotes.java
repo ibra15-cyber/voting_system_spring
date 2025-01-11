@@ -3,21 +3,21 @@ package com.voting.VotingApp.voting_register.entity;
 import com.voting.VotingApp.votes.entity.Vote;
 import com.voting.VotingApp.voting_register.enums.Gender;
 import jakarta.persistence.*;
-import lombok.*;
-
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Table(name="voters")
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Voter {
+public class PresidentialCandidateConstituencyVotes {
     @Id()
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long voterId;
+    private Long Id;
 
-    private String voterNumber;
+    private Long presidentialCandidate;
 //
 //    @Column(nullable = false)
 //    @NotBlank
@@ -39,7 +39,7 @@ public class Voter {
     @JoinColumn(name="constituency_id")
     private Constituency constituency;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne
     private Vote vote;
 
 }

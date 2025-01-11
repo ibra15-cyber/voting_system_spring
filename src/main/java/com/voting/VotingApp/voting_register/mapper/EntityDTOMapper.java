@@ -45,7 +45,7 @@ public class EntityDTOMapper {
         constituencyDTO.setDistrictId(constituency.getConstituencyId());
         constituencyDTO.setConstituencyCapital(constituency.getConstituencyCapital());
         constituencyDTO.setConstituencyElectoralCode(constituency.getConstituencyElectoralCode());
-        constituencyDTO.setConstituencyTotalVotes(constituency.getConstituencyTotalVotes());
+        constituencyDTO.setConstituencyTotalVotes(constituency.getConstituencyTotalVotesCast());
 
         return constituencyDTO;
     }

@@ -34,7 +34,4 @@ public class District {
 
     private Long districtTotalVotesCast;
 
-    private Long districtTotalForAPresidentialCandidate;
-
-    private Long districtTotalForAParliamentaryCandidate;
 }

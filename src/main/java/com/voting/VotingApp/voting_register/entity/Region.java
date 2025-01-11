@@ -29,10 +29,6 @@ public class Region {
 
     private Long regionalTotalVotesCast;
 
-    private Long regionalTotalForAPresidentialCandidate;
-
-    private Long regionalTotalForAParliamentaryCandidate;
-
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<District> districts;
 }

@@ -23,8 +23,8 @@ public class Vote {
     private Long voteId;
 
     //we could add voterNumber but will lead to redundancy
-    @OneToOne
-    @JoinColumn(name="voter_id", unique = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(unique = true)
     private Voter voter;
 
     //the parliamentary and presidential candidate voted for
