@@ -96,7 +96,6 @@ public class VoteServiceImp implements VoteService {
          * GET CONSTITUENCY VOTES
          *
          */
-
         List<Vote> listOfVotesForAParticularConstituency = voteRepository.findVotesByConstituencyId(parliamentaryCandidate.getConstituency().getConstituencyId());
         //after vote is cast, aggregate the total
 //        BigDecimal totalConstituencyVotes = votes.stream().map(Vote::getParliamentaryCandidate).reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -115,8 +114,10 @@ public class VoteServiceImp implements VoteService {
         constituencyRepository.save(constituency);
 
 
-        //set total for each candidate
-        // Group votes by parliamentary candidate and calculate totals for each
+        /** set total for each candidate
+         *
+         */
+        // Group listOfVotesForAParticularConstituency by parliamentary candidate and calculate totals for each
         Map<Long, Long> totalVotesByParliamentaryCandidateInAConstituency = listOfVotesForAParticularConstituency.stream()
                 .collect(Collectors.groupingBy(
                         vote -> vote.getParliamentaryCandidate().getId(), // Group by candidate ID
@@ -136,8 +137,16 @@ public class VoteServiceImp implements VoteService {
         });
 
 
+
         //PRESIDENTIAL CANDIDATE VOTE BY CONSTITUENCY
-        // votes exist already
+        /*** -- get us votes from each constituency, group by the presidential id and sum
+             select presidential_candidate_id, count(*) as total
+             from votes
+             where constituency_id=1
+             group by presidential_candidate_id;
+
+         we already have listOfVotesForAParticularConstituency
+         **/
         Map<Long, Long> mapOfTotalVotesForPresidentialCandidateInConstituencyById = listOfVotesForAParticularConstituency.stream()
                 .filter(vote -> vote.getPresidentialCandidate() != null) // Ensure valid presidential candidate
                 .collect(Collectors.groupingBy(
@@ -146,8 +155,10 @@ public class VoteServiceImp implements VoteService {
                 ));
         //SELECT presidentialId, count(*) as totalVotes
         //FROM listOfVotesForAParticularConstituency
+        //where presidential_id = :presidential_id ///only necessary when we add filter(vote-> vote.getPresidentialCandidate.id)
         //GROUP by presidentialId
         //votesByPresidentialCandidateInConstituencyMap(presidentialId, voteTotal)
+
 
         // Print or process the result
         mapOfTotalVotesForPresidentialCandidateInConstituencyById.forEach((candidateId, totalVotes) -> {
@@ -160,6 +171,7 @@ public class VoteServiceImp implements VoteService {
 //            presidentialCandidateToBeUpdated.setTotalVotesAttained(totalVotes); //set a property of presidential candidate and save to that repo
 //            presidentialCandidateRepository.save(presidentialCandidateToBeUpdated);
 
+
 //            (id, constituencyId, presidentialCandidateId, presidentialCandidateTotal)
 //            it will be a bad idea to iterate something,
 //            //we need this table to see the votes attained by presidential candidates in a constituency
@@ -167,7 +179,10 @@ public class VoteServiceImp implements VoteService {
                     constituencyPresidentialVoteSummaryRepository.findByConstituencyIdAndPresidentialCandidateId(
                             constituency.getConstituencyId(), candidateId
                     );
-
+            //SELECT *
+            //FROM constituencyPresidentialVoteSummaryRepository
+            //WHERE constituencyId = :constituencyId AND presidentialCandidateId = :candidateId
+            //save as existing else create
             if (existingConstituencyPresidentialVoteSummaryRecord == null) {
                 ConstituencyPresidentialVoteSummary constituencyPresidentialVoteSummaryRecord = new  ConstituencyPresidentialVoteSummary();
 
@@ -191,21 +206,26 @@ public class VoteServiceImp implements VoteService {
                  */
 
         // Fetch all constituencies in the given district
-        List<Constituency> listOfConstituenciesInDistrict = constituencyRepository.findConstituenciesByDistrict(constituency.getDistrict());
+        //findConstituenciesByDistrict
+        //SELECT *
+        //FROM constituencyRepository
+        //where district_Id = districtId //not using id bc constituency and district have direct relationship
 
         // Map to store total votes for each district
         //totalVotesByDistrict(districtId, districtTotal)
         //I we have already aggregated constituency votes
         //we got 2 options, aggregate the districts votes from the constituency presidential vote summary or repeat from the constituencyTable
         //advantages, if you use the former, you got to include district id in the summary table, less computation, but if there errors from the initial computation
-        //it will propagate and leads to redundancy (adding a district that can be infered from the constituency. Second option, do it directly from constituency, highly computative;
+        //it will propagate and leads to redundancy (adding a district that can be inferred from the constituency. Second option, do it directly from constituency, highly computative;
         //higher chances of getting right
         //constituency then require to have a property that saves total for each candidate which isn't possible bc of dimention (tow values of candidates to 1 field)
         //so change it and use constituency summary
         //aka add district id or iterate from the constituency Id
 
 
-
+        /***
+         * using summary table to achieve this instead of using de-normalization aka using placeholders directly in votes table
+         */
 //
 //        (constid, presidentialId, districtid, total)
 //        1,          1                1          50
@@ -217,75 +237,60 @@ public class VoteServiceImp implements VoteService {
 //        from constituency_presidential_vote_summary
 //        where constituency_id = 1 And presidential_candidate_id=1;
 
+        System.out.println("Records for Constituencies in District: " + listOfRecordsOfVotesForPresidentialCandidateForConstituenciesInAParticularDistrict.size());
+        listOfRecordsOfVotesForPresidentialCandidateForConstituenciesInAParticularDistrict.forEach(System.out::println);
+
+
 
 //        mapOfTotalVotesForPresidentialCandidateByDistrict(districtId, totalVotes)
         //issue is here, grouping by and collectors
-        Map<Long, Long> mapOfTotalVotesForPresidentialCandidateByDistrict = listOfRecordsOfVotesForPresidentialCandidateForConstituenciesInAParticularDistrict.stream()
+        Map<String, Long> mapOfTotalVotesForPresidentialCandidateByDistrict = listOfRecordsOfVotesForPresidentialCandidateForConstituenciesInAParticularDistrict.stream()
                 .collect(Collectors.groupingBy(
-                        ConstituencyPresidentialVoteSummary::getDistrictId,
+                        record -> record.getDistrictId() + "-" + record.getPresidentialCandidateId(),
                         Collectors.summingLong(ConstituencyPresidentialVoteSummary::getPresidentialCandidateVoteTotal)
                 ));
         //SELECT districtId, count(*) as districtTotalVotesByPresidentialCandidate
         //FROM listOfRecordsOfVotesForPresidentialCandidateForConstituenciesInAParticularDistrict
         //GROUP BY districtId
+        System.out.println("Map of Total Votes by District: " + mapOfTotalVotesForPresidentialCandidateByDistrict);
+
+        listOfRecordsOfVotesForPresidentialCandidateForConstituenciesInAParticularDistrict.forEach(record ->
+                System.out.println("District ID: " + record.getDistrictId() + ", Vote Total: " + record.getPresidentialCandidateVoteTotal())
+        );
+
+
 
 
         // Now you have the total votes for each district
-        mapOfTotalVotesForPresidentialCandidateByDistrict.forEach((districtId, totalVotes) -> {
+        mapOfTotalVotesForPresidentialCandidateByDistrict.forEach((key, totalVotes) -> {
+            String[] parts = key.split("-");
+            Long districtId = Long.valueOf(parts[0]);
+            Long presidentialCandidateId = Long.valueOf(parts[1]);
 
-            DistrictPresidentialVoteSummary districtPresidentialVoteSummaryRecord =
+            DistrictPresidentialVoteSummary existingDistrictPresidentialVoteSummary =
                     districtPresidentialVoteSummaryRepository.findByDistrictIdAndPresidentialCandidateId(
-                            districtId, voteDTO.getPresidentialCandidateId()
-                    ).orElse(new DistrictPresidentialVoteSummary());
+                            districtId, presidentialCandidateId
+                    ).orElse(null);
 
-            districtPresidentialVoteSummaryRecord.setDistrictId(districtId);
-            districtPresidentialVoteSummaryRecord.setPresidentialCandidateId(voteDTO.getPresidentialCandidateId());
-//            districtPresidentialVoteSummary.setDistrictId(constituency.getDistrict().getDistrictId());
-            districtPresidentialVoteSummaryRecord.setPresidentialCandidateVoteTotal(totalVotes);
-
-            districtPresidentialVoteSummaryRepository.save(districtPresidentialVoteSummaryRecord);
-
-        });
-
-        //DISTRICT PRESIDENTIAL CANDIDATE TOTAL
-        // Fetch Constituency IDs in the List of constituencies in a given district
-        //I have fetched the constituencies already above constituenciesInDistrict
-        //aka for each them, get the constituencyId and keep it as a list
-        List<Long> constituencyIds = listOfConstituenciesInDistrict.stream()
-                .map(Constituency::getConstituencyId)
-                .collect(Collectors.toList());
-
-        // Fetch Presidential Vote Summaries for These Constituencies
-        List<ConstituencyPresidentialVoteSummary> presidentialVoteSummariesInDistrict = constituencyPresidentialVoteSummaryRepository
-                .findAllById(constituencyIds);
-
-        // Aggregate Votes by Presidential Candidate
-        Map<Long, Long> votesByPresidentialCandidateInDistrict = presidentialVoteSummariesInDistrict.stream()
-                .collect(Collectors.groupingBy(
-                        ConstituencyPresidentialVoteSummary::getPresidentialCandidateId,
-                        Collectors.summingLong(ConstituencyPresidentialVoteSummary::getPresidentialCandidateVoteTotal)
-                ));
-
-        votesByPresidentialCandidateInDistrict.forEach((candidateId, totalVotes) -> {
-
-            DistrictPresidentialVoteSummary existingDistrictPresidentialVoteSummary = new DistrictPresidentialVoteSummary();
             if (existingDistrictPresidentialVoteSummary == null) {
                 DistrictPresidentialVoteSummary districtPresidentialVoteSummary = new DistrictPresidentialVoteSummary();
 
-                districtPresidentialVoteSummary.setPresidentialCandidateId(candidateId);
+                districtPresidentialVoteSummary.setPresidentialCandidateId(presidentialCandidate.getPresidentialCandidateId());
                 districtPresidentialVoteSummary.setPresidentialCandidateVoteTotal(totalVotes);
-                districtPresidentialVoteSummary.setDistrictId(constituency.getDistrict().getDistrictId());
+                districtPresidentialVoteSummary.setDistrictId(districtId);
+
+                District district = districtRepository.findById(districtId).orElseThrow(()-> new RuntimeException("no district found!"));
+                districtPresidentialVoteSummary.setRegionId(district.getRegion().getRegionId());
 
                 districtPresidentialVoteSummaryRepository.saveAndFlush(districtPresidentialVoteSummary);
 
             } else {
+
                 existingDistrictPresidentialVoteSummary.setPresidentialCandidateVoteTotal(totalVotes);
                 districtPresidentialVoteSummaryRepository.saveAndFlush(existingDistrictPresidentialVoteSummary);
             }
 
         });
-
-
 
         /**
          *  GET REGIONAL VOTES
@@ -293,67 +298,49 @@ public class VoteServiceImp implements VoteService {
 
         //REGIONAL PARLIAMENTARY CANDIDATE TOTAL
 
-        List<District> districtsInRegion = districtRepository.findDistrictsByRegion(constituency.getDistrict().getRegion());
-        List<District> listOfDistrictsInAParticularRegion = districtRepository.findByDistrictIdAndRegion(constituency.getDistrict().getDistrictId(), constituency.getDistrict().getRegion());
+        //to achieve that add a de-normalized regionId in the district summary
+        //grab the district summary to filter districts in region ** we can filter it from district table later
+        //then group by region and total presidential candidate
+        //iterate and save,
+        //but fetch to see if the regional record exist, else create
 
 
-        Map<Long, Long> totalVotesByRegion = listOfDistrictsInAParticularRegion.stream().collect(
+        //find districts in a particular region from the district summary
+        List<DistrictPresidentialVoteSummary> listOfDistrictsInAParticularRegion =
+                districtPresidentialVoteSummaryRepository.findByDistrictIdAndRegionId(constituency.getDistrict().getDistrictId(), constituency.getDistrict().getRegion().getRegionId());
+        System.out.println("Found districts: " + listOfDistrictsInAParticularRegion);
+
+
+        //group by regionId and total the presidential candidate's total
+        Map<String, Long> mapOfTotalVotesByRegion = listOfDistrictsInAParticularRegion.stream().collect(
                 Collectors.groupingBy(
-                        District::getDistrictId,
-                        Collectors.summingLong(District::getDistrictTotalVotesCast)
+                        record -> record.getRegionId() + "-" + record.getPresidentialCandidateId(),
+                        Collectors.summingLong(DistrictPresidentialVoteSummary::getPresidentialCandidateVoteTotal)
                 ));
 
-        totalVotesByRegion.forEach((regionId, totalVotes)-> {
-            Region region = regionRepository.findById(regionId).orElseThrow(() -> new RuntimeException("District not found"));
-            region.setRegionalTotalVotesCast(totalVotes);
-            regionRepository.save(region);
+        //for each save, but first check if that record exists else update it
+        mapOfTotalVotesByRegion.forEach((key, totalVotes) -> {
+            // Split the key to get regionId and candidateId
+            String[] parts = key.split("-");
+            Long regionId = Long.valueOf(parts[0]);
+            Long presidentialCandidateId = Long.valueOf(parts[1]);
+            RegionalPresidentialVoteSummary existingRegionalPresidentialVoteSummary =
+                    regionalPresidentialVoteSummaryRepository
+                            .findByRegionIdAndPresidentialCandidateId(regionId, presidentialCandidateId);
+
+            if (existingRegionalPresidentialVoteSummary == null ) {
+                RegionalPresidentialVoteSummary regionalPresidentialVoteSummary = new RegionalPresidentialVoteSummary();
+
+                regionalPresidentialVoteSummary.setPresidentialCandidateId(presidentialCandidate.getPresidentialCandidateId());
+                regionalPresidentialVoteSummary.setPresidentialCandidateVoteTotal(totalVotes);
+                regionalPresidentialVoteSummary.setRegionId(regionId);
+
+                regionalPresidentialVoteSummaryRepository.saveAndFlush(regionalPresidentialVoteSummary);
+            } else  {
+                existingRegionalPresidentialVoteSummary.setPresidentialCandidateVoteTotal(totalVotes);
+                regionalPresidentialVoteSummaryRepository.saveAndFlush(existingRegionalPresidentialVoteSummary);
+            }
         });
-
-
-        //REGIONAL PRESIDENTIAL CANDIDATE TOTAL
-        List<Long> allDistrictIds = districtsInRegion.stream()
-                .map(District::getDistrictId).collect(Collectors.toList());
-//
-//        List<Long> constituencyIds = districtsInRegion.stream()
-//                .flatMap(district -> district.getConstituency().stream()) // Get constituencies from each district
-//                .map(Constituency::getConstituencyId) // Extract constituency IDs
-//                .toList();
-
-
-//        List<RegionalPresidentialVoteSummary> presidentialVoteSummariesInRegions =
-//                regionalPresidentialVoteSummaryRepository.findAllById(constituencyIds);
-        List<DistrictPresidentialVoteSummary> districtPresidentialVoteSummaries =
-                districtPresidentialVoteSummaryRepository.findAllById(allDistrictIds);
-
-
-
-        Map<Long, Long> votesByPresidentialCandidateInRegion = districtPresidentialVoteSummaries.stream()
-               .collect(Collectors.groupingBy(
-                       DistrictPresidentialVoteSummary::getPresidentialCandidateId,
-                       Collectors.summingLong(DistrictPresidentialVoteSummary::getPresidentialCandidateVoteTotal)
-               ));
-
-       votesByPresidentialCandidateInRegion.forEach((candidateId, totalVotes) -> {
-           RegionalPresidentialVoteSummary existingRegionalPresidentialVoteSummary =
-                   regionalPresidentialVoteSummaryRepository
-                           .findRegionalPresidentialVoteSummariesByRegionIdAndAndPresidentialCandidateId(constituency.getDistrict().getRegion().getRegionId(), candidateId);
-
-           if (existingRegionalPresidentialVoteSummary == null ) {
-               RegionalPresidentialVoteSummary regionalPresidentialVoteSummary = new RegionalPresidentialVoteSummary();
-
-               regionalPresidentialVoteSummary.setPresidentialCandidateId(candidateId);
-               regionalPresidentialVoteSummary.setPresidentialCandidateVoteTotal(totalVotes);
-               regionalPresidentialVoteSummary.setRegionId(constituency.getDistrict().getRegion().getRegionId());
-
-               regionalPresidentialVoteSummaryRepository.save(regionalPresidentialVoteSummary);
-           } else  {
-               existingRegionalPresidentialVoteSummary.setPresidentialCandidateVoteTotal(totalVotes);
-               regionalPresidentialVoteSummaryRepository.save(existingRegionalPresidentialVoteSummary);
-
-           }
-
-       });
-
 
 
         /**

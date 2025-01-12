@@ -9,5 +9,6 @@ import java.util.Optional;
 
 public interface DistrictPresidentialVoteSummaryRepository extends JpaRepository<DistrictPresidentialVoteSummary, Long> {
     Optional<DistrictPresidentialVoteSummary> findByDistrictIdAndPresidentialCandidateId(Long districtId, Long presidentialId);
+    List<DistrictPresidentialVoteSummary> findByDistrictIdAndRegionId(Long districtId, Long regionId);
 
 }

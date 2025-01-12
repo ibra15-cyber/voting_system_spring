@@ -19,6 +19,8 @@ public class DistrictPresidentialVoteSummary {
 
     private Long districtId;
 
+    private Long regionId;
+
     private Long presidentialCandidateId;
 
     private Long presidentialCandidateVoteTotal;

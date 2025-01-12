@@ -21,8 +21,6 @@ public class RegionalPresidentialVoteSummary {
 
     private Long presidentialCandidateId;
 
-    private PoliticalParty politicalParty;
-
     private Long presidentialCandidateVoteTotal;
 
 }
