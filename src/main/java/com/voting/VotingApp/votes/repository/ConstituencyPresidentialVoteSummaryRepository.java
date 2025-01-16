@@ -12,7 +12,7 @@ public interface ConstituencyPresidentialVoteSummaryRepository extends JpaReposi
     //        from constituency_presidential_vote_summary
     //        where constituency_id = 1 And presidential_candidate_id=1;
 //    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    ConstituencyPresidentialVoteSummary findByConstituencyIdAndPresidentialCandidateId(Long constituencyId, Long presidentialId);
-    List<ConstituencyPresidentialVoteSummary> findByConstituencyIdAndDistrictId(Long constituencyId, Long districtId); //possible using ids because in this case we are using placeholders
+//    ConstituencyPresidentialVoteSummary findByConstituencyIdAndPresidentialCandidateId(Long constituencyId, Long presidentialId);
+//    List<ConstituencyPresidentialVoteSummary> findByConstituencyIdAndDistrictId(Long constituencyId, Long districtId); //possible using ids because in this case we are using placeholders
 //    List<ConstituencyPresidentialVoteSummary> findAllByConstituencyId(List<Long> constituencyId);
 }

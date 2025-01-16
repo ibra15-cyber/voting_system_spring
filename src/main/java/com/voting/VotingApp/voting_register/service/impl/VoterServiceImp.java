@@ -42,22 +42,23 @@ public class VoterServiceImp implements VoterService {
         newVoter.setLastName(voterDTO.getLastName());
         newVoter.setVoterNumber(voterDTO.getVoterNumber());
 
-        Constituency constituency = constituencyRepository.findByConstituencyElectoralCode(voterDTO.getConstituencyElectoralCode()).orElseThrow( () -> new RuntimeException("Constituency does not exist"));
-        newVoter.setConstituency(constituency);
+//        Constituency constituency = constituencyRepository.findConstituencyByConstituencyElectoralCode(voterDTO.getConstituencyElectoralCode()).orElseThrow( () -> new RuntimeException("Constituency does not exist"));
+//        newVoter.setConstituency(constituency);
 
-        District district = constituency.getDistrict();
-        Region region = district.getRegion();
+//        District district = constituency.getDistrict();
+//        Region region = district.getRegion();
 
-        PollingStation pollingStation = pollingStationRepository.findByPollingStationCode(voterDTO.getVoterPollingStationElectoralCode()).orElseThrow(()-> new RuntimeException("Polling Station not found"));
+        PollingStation pollingStation = pollingStationRepository.findByPollingStationCode(voterDTO.getVoterPollingStationElectoralCode())
+                .orElseThrow(()-> new RuntimeException("Polling Station not found"));
         newVoter.setPollingStation(pollingStation);
 
         voterRepository.save(newVoter);
 
         return Response.builder()
                 .message("Voter created successfully!")
-                .regionDTO( entityDTOMapper.mapRegionToRegionDTO(region))
-                .districtDTO(entityDTOMapper.mapDistrictToDistrictDTO(district))
-                .constituencyDTO(entityDTOMapper.mapConstituencyToConstituencyDTO(constituency))
+//                .regionDTO( entityDTOMapper.mapRegionToRegionDTO(region))
+//                .districtDTO(entityDTOMapper.mapDistrictToDistrictDTO(district))
+//                .constituencyDTO(entityDTOMapper.mapConstituencyToConstituencyDTO(constituency))
                 .build();
     }
 

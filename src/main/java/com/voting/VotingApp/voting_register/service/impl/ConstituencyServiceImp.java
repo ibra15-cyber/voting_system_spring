@@ -84,7 +84,7 @@ public class ConstituencyServiceImp implements ConstituencyService {
 
     @Override
     public Response getConstituencyById(String constituencyId) {
-        Constituency constituency = constituencyRepository.findByConstituencyElectoralCode(constituencyId).orElseThrow(()-> new RuntimeException("Constituency not found!"));
+        Constituency constituency = constituencyRepository.findConstituencyByConstituencyElectoralCode(constituencyId).orElseThrow(()-> new RuntimeException("Constituency not found!"));
 
         return Response.builder()
                 .message("District retrieved successfully!")
@@ -94,7 +94,7 @@ public class ConstituencyServiceImp implements ConstituencyService {
 
     @Override
     public Response updateConstituency(String constituencyId, ConstituencyDTO constituencyDTO) {
-        Constituency constituency = constituencyRepository.findByConstituencyElectoralCode(constituencyId).orElseThrow(()-> new RuntimeException("Constituency not found!"));
+        Constituency constituency = constituencyRepository.findConstituencyByConstituencyElectoralCode(constituencyId).orElseThrow(()-> new RuntimeException("Constituency not found!"));
 
 
         if (constituencyDTO.getConstituencyCapital() != null ) constituency.setConstituencyCapital(constituencyDTO.getConstituencyCapital());
@@ -114,7 +114,7 @@ public class ConstituencyServiceImp implements ConstituencyService {
 
     @Override
     public Response deleteConstituency(String constituencyId) {
-        Optional<Constituency> optionalConstituency = constituencyRepository.findByConstituencyElectoralCode(constituencyId);
+        Optional<Constituency> optionalConstituency = constituencyRepository.findConstituencyByConstituencyElectoralCode(constituencyId);
 
         Constituency constituency;
         if (optionalConstituency.isPresent()) {
@@ -129,7 +129,7 @@ public class ConstituencyServiceImp implements ConstituencyService {
 
     @Override
     public Response getParliamentaryCandidatesByConstituency(String constituencyId) {
-        Constituency constituency = constituencyRepository.findByConstituencyElectoralCode(constituencyId).orElseThrow(()-> new RuntimeException("Constituency does not exist"));
+        Constituency constituency = constituencyRepository.findConstituencyByConstituencyElectoralCode(constituencyId).orElseThrow(()-> new RuntimeException("Constituency does not exist"));
 
         List<ParliamentaryCandidate> parliamentaryCandidates = parliamentaryCandidateRepository.findParliamentaryCandidateByConstituency(constituency);
 

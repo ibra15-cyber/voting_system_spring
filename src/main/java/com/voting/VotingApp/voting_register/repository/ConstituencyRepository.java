@@ -12,6 +12,6 @@ public interface ConstituencyRepository extends JpaRepository<Constituency, Long
     //select *
     //from constituencies
     //where district_id=1;
-    Optional<Constituency> findByConstituencyElectoralCode(String electoralCode);
+    Optional<Constituency> findConstituencyByConstituencyElectoralCode(String constituencyElectoralCode);
     boolean existsByConstituencyElectoralCode(String electoralCode);
 }

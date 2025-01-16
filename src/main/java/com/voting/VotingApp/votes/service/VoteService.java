@@ -8,4 +8,6 @@ public interface VoteService {
     Response getPresidentialVoteSummaryByConstituency();
     Response getParliamentaryVoteSummary();
     Response getPresidentialVoteSummaryByDistrict();
+
+    Response getAllVotes();
 }

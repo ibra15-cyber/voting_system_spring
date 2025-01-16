@@ -1,6 +1,7 @@
 package com.voting.VotingApp.voting_register.entity;
 
 
+import com.voting.VotingApp.votes.entity.Vote;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,15 +36,18 @@ public class Constituency {
     @JoinColumn(name = "district_electoral_code", referencedColumnName = "districtElectoralCode") // Mapping by code
     private District district;
 
-    @OneToMany()
-    private List<Voter> voter;
+//    @OneToMany(mappedBy = "constituency", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    private List<Voter> voter;
 
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     private List<ParliamentaryCandidate> parliamentaryCandidates;
 
-
     @OneToMany(mappedBy = "constituency", cascade = CascadeType.ALL,orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<PollingStation> listOfPollingStations;
+
+//    @OneToMany(mappedBy = "constituency", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Vote>  vote;
 
 }

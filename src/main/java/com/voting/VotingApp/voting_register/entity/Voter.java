@@ -37,11 +37,12 @@ public class Voter {
 //    @Column(nullable = false)
     private Integer age;
 
-    @ManyToOne()
-    @JoinColumn(name="constituency_id")
-    private Constituency constituency;
+//    @ManyToOne()
+//    @JoinColumn(name="constituency_code")
+//    private Constituency constituency;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE) //when a voter is deleted, his vote should be deleted as well
     private Vote vote;
 
     @ManyToOne()

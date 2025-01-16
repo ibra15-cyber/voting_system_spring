@@ -22,8 +22,9 @@ public class AllSeed implements CommandLineRunner {
     private final PresidentialCandidateService presidentialCandidateService;
     private final PollingStationService pollingStationService;
     private  final VoterService voterService;
+    private final VoteSeed voteSeed;
 
-    public AllSeed(RegionSeed regionSeed, DistrictSeed districtSeed, ConstituencySeed constituencySeed, PresidentialCandidateSeed presidentialCandidateSeed, ParliamentaryCandidateSeed parliamentaryCandidateSeed, PollingStationSeed pollingStationSeed, VoterSeed voterSeed, ConstituencyService constituencyService, RegionService regionService, DistrictService districtService, ParliamentaryCandidateService parliamentaryCandidateService, PresidentialCandidateService presidentialCandidateService, PollingStationService pollingStationService, VoterService voterService) {
+    public AllSeed(RegionSeed regionSeed, DistrictSeed districtSeed, ConstituencySeed constituencySeed, PresidentialCandidateSeed presidentialCandidateSeed, ParliamentaryCandidateSeed parliamentaryCandidateSeed, PollingStationSeed pollingStationSeed, VoterSeed voterSeed, ConstituencyService constituencyService, RegionService regionService, DistrictService districtService, ParliamentaryCandidateService parliamentaryCandidateService, PresidentialCandidateService presidentialCandidateService, PollingStationService pollingStationService, VoterService voterService, VoteSeed voteSeed) {
         this.regionSeed = regionSeed;
         this.districtSeed = districtSeed;
         this.constituencySeed = constituencySeed;
@@ -39,6 +40,7 @@ public class AllSeed implements CommandLineRunner {
         this.presidentialCandidateService = presidentialCandidateService;
         this.pollingStationService = pollingStationService;
         this.voterService = voterService;
+        this.voteSeed = voteSeed;
     }
 
     @Override
@@ -53,14 +55,15 @@ public class AllSeed implements CommandLineRunner {
 
 
 
-
-//        regionSeed.seedRegions();
-//        districtSeed.seeDistricts();
-//        constituencySeed.seeConstituencies();
-//        pollingStationSeed.seedPollingStations();
-//        presidentialCandidateSeed.seedPresidentialCandidates();
-//        parliamentaryCandidateSeed.seedPresidentialCandidates();
-//        voterSeed.seedVoters();
+//
+        regionSeed.seedRegions();
+        districtSeed.seeDistricts();
+        constituencySeed.seeConstituencies();
+        pollingStationSeed.seedPollingStations();
+        presidentialCandidateSeed.seedPresidentialCandidates();
+        parliamentaryCandidateSeed.seedPresidentialCandidates();
+        voterSeed.seedVoters();
+        voteSeed.seedVotes();
 
     }
 }

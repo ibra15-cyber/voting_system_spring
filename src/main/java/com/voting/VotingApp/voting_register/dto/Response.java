@@ -2,6 +2,7 @@ package com.voting.VotingApp.voting_register.dto;
 
 import com.voting.VotingApp.votes.entity.ConstituencyPresidentialVoteSummary;
 import com.voting.VotingApp.votes.entity.DistrictPresidentialVoteSummary;
+import com.voting.VotingApp.votes.entity.Vote;
 import com.voting.VotingApp.votes.repository.DistrictPresidentialVoteSummaryRepository;
 import lombok.Builder;
 import lombok.Data;
@@ -31,5 +32,6 @@ public class Response {
     private List<PollingStationDTO> pollingStationDTOList;
     private PresidentialCandidateDTO presidentialCandidateDTO;
     private List<PresidentialCandidateDTO> presidentialCandidateDTOList;
+    private List<Vote> listAllVotes;
 
 }

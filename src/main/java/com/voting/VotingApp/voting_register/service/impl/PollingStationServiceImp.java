@@ -40,7 +40,7 @@ public class PollingStationServiceImp implements PollingStationService {
         PollingStation newPollingStation = new PollingStation();
         newPollingStation.setPollingStationName(pollingStationDTO.getPollingStationName());
 
-        Constituency constituency = constituencyRepository.findByConstituencyElectoralCode(pollingStationDTO.getConstituencyCode()).orElseThrow(()-> new RuntimeException("constituency not found"));
+        Constituency constituency = constituencyRepository.findConstituencyByConstituencyElectoralCode(pollingStationDTO.getConstituencyCode()).orElseThrow(()-> new RuntimeException("constituency not found"));
         newPollingStation.setConstituency(constituency);
 
         String constituencyElectoralCode = constituency.getConstituencyElectoralCode();
@@ -93,7 +93,7 @@ public class PollingStationServiceImp implements PollingStationService {
 //        if (pollingStationDTO.getPollingStationCode() != null ) pollingStation.setPollingStationCode(pollingStationDTO.getPollingStationCode());
 
         if (pollingStationDTO.getConstituencyCode() != null ) {
-            Constituency constituency = constituencyRepository.findByConstituencyElectoralCode(pollingStationDTO.getConstituencyCode()).orElseThrow(()-> new RuntimeException("constituency not found"));
+            Constituency constituency = constituencyRepository.findConstituencyByConstituencyElectoralCode(pollingStationDTO.getConstituencyCode()).orElseThrow(()-> new RuntimeException("constituency not found"));
             pollingStation.setConstituency(constituency);
         }
 

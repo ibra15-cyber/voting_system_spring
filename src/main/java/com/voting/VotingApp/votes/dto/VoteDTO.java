@@ -1,12 +1,15 @@
 package com.voting.VotingApp.votes.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor @NoArgsConstructor
 public class VoteDTO {
-    private Long voterId;
-    private Long constituencyId;
+    private Long voterIdNumber;
+//    private String constituencyCode;
     private Long parliamentaryCandidateId;
     private Long presidentialCandidateId;
-    private Long pollingStationId;
+//    private String pollingStationCode;
 }

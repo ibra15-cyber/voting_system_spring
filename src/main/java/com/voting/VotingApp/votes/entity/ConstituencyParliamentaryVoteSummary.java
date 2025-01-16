@@ -1,6 +1,5 @@
 package com.voting.VotingApp.votes.entity;
 
-import com.voting.VotingApp.voting_register.enums.PoliticalParty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ConstituencyPresidentialVoteSummary {
+public class ConstituencyParliamentaryVoteSummary {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,9 +20,9 @@ public class ConstituencyPresidentialVoteSummary {
 
     private String districtId;
 
-    private Long presidentialCandidateId;
+    private Long parliamentaryCandidateId;
 
-    private Long presidentialCandidateVoteTotal;
+    private Long parliamentaryCandidateVoteTotal;
 
     //FOR EACH CONSTITUENCY WE NEED TO SEE A SUMMARY OF THE VOTE
     //AKA CONST ID, PRESIDENTIAL CANDIDATE ID

@@ -21,8 +21,13 @@ public class VoteController {
 
 
     @PostMapping
-    public ResponseEntity<Response> vote (@RequestBody VoteDTO voteDTO) {
+    public ResponseEntity<Response> vote(@RequestBody VoteDTO voteDTO) {
         return ResponseEntity.status(HttpStatus.OK).body(voteService.vote(voteDTO));
+    }
+
+    @GetMapping("/get-all-votes")
+    public ResponseEntity<Response> getAllVotes(){
+        return ResponseEntity.status(HttpStatus.OK).body(voteService.getAllVotes());
     }
 
     @GetMapping("/presidential-summary")

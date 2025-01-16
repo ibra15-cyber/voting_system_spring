@@ -1,9 +1,6 @@
 package com.voting.VotingApp.votes.entity;
 
-import com.voting.VotingApp.voting_register.entity.Constituency;
-import com.voting.VotingApp.voting_register.entity.ParliamentaryCandidate;
-import com.voting.VotingApp.voting_register.entity.PresidentialCandidate;
-import com.voting.VotingApp.voting_register.entity.Voter;
+import com.voting.VotingApp.voting_register.entity.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,8 +20,8 @@ public class Vote {
     private Long voteId;
 
     //we could add voterNumber but will lead to redundancy
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(unique = true)
+    @OneToOne()
+    @JoinColumn(name = "voter_id_number", referencedColumnName = "voterNumber")
     private Voter voter;
 
     //the parliamentary and presidential candidate voted for
@@ -36,9 +33,15 @@ public class Vote {
     @JoinColumn(name="presidentialCandidate_id")
     private PresidentialCandidate presidentialCandidate;
 
-    private Long constituencyId; //will be pulled from the parliamentary candidate
+    @ManyToOne
+    @JoinColumn(name = "polling_electoral_code", referencedColumnName = "pollingStationCode")
+    private PollingStation pollingStation;
 
-    private String pollingStationId;
+    @Column(nullable = false)
+    private String constituencyCode;
+
+    @Column(nullable = false)
+    private String regionalCode;
 
     //just like we have orderItem, and orders, we shd have votes and voterItem aka presidentialCandidate
     //but the link btw product and order is orderItem
@@ -47,6 +50,9 @@ public class Vote {
 //    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<VoteCast> voteCastList;
 
+    //    @ManyToOne
+//    @JoinColumn(name = "constituency-electoral-code", referencedColumnName = "constituencyElectoralCode")
+//    private Constituency constituency; //will be pulled from the parliamentary candidate
 
 
 

@@ -39,7 +39,7 @@ public class ParliamentaryCandidateServiceImp implements ParliamentaryCandidateS
         parliamentaryCandidate.setParliamentaryCandidateNumber(parliamentaryCandidateDTO.getVoterIdCardNumber());
 
         //don't do this is mapper. this means we can use id from dto to get us an object in service to map with real dto data
-        Constituency constituency= constituencyRepository.findByConstituencyElectoralCode(parliamentaryCandidateDTO.getConstituencyElectoralCode()).orElseThrow(()-> new RuntimeException("Constituency not found"));
+        Constituency constituency= constituencyRepository.findConstituencyByConstituencyElectoralCode(parliamentaryCandidateDTO.getConstituencyElectoralCode()).orElseThrow(()-> new RuntimeException("Constituency not found"));
         parliamentaryCandidate.setConstituency(constituency);
 
 
@@ -89,7 +89,7 @@ public class ParliamentaryCandidateServiceImp implements ParliamentaryCandidateS
         if (parliamentaryCandidateDTO.getAge() != null ) parliamentaryCandidate.setAge(parliamentaryCandidateDTO.getAge());
 
         if (parliamentaryCandidateDTO.getConstituencyElectoralCode() != null) {
-            Constituency constituency = constituencyRepository.findByConstituencyElectoralCode(parliamentaryCandidateDTO.getConstituencyElectoralCode()).orElseThrow(() -> new RuntimeException("Constituency not found"));
+            Constituency constituency = constituencyRepository.findConstituencyByConstituencyElectoralCode(parliamentaryCandidateDTO.getConstituencyElectoralCode()).orElseThrow(() -> new RuntimeException("Constituency not found"));
             parliamentaryCandidate.setConstituency(constituency);
         }
 
