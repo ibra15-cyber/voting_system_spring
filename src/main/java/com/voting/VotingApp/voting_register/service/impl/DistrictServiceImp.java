@@ -38,10 +38,16 @@ public class DistrictServiceImp implements DistrictService {
         District district = new District();
         district.setDistrictName(districtDTO.getDistrictName());
         district.setDistrictCapital(districtDTO.getDistrictCapital());
-        district.setDistrictElectoralCode(districtDTO.getDistrictElectoralCode());
 
-        Region region = regionRepository.findById(districtDTO.getRegionId()).orElseThrow(()-> new RuntimeException("Region not found"));
+//        Region region = regionRepository.findByRegionElectoralCode(districtDTO.getRegionElectoralCode()).orElseThrow(()-> new RuntimeException("region not found"));
+
+        String regionCode = districtDTO.getRegionElectoralCode();
+        district.setDistrictElectoralCode(regionCode + districtDTO.getDistrictElectoralCode());
+
+        Region region = regionRepository.findByRegionElectoralCode(regionCode).orElseThrow(()-> new RuntimeException("Region does not exist"));
         district.setRegion(region);
+//        district.setRegion();
+////        district.setRegion(region);
 
 
         districtRepository.save(district);
@@ -74,9 +80,9 @@ public class DistrictServiceImp implements DistrictService {
 
 
     @Override
-    public Response getDistrictById(Long districtId) {
+    public Response getDistrictById(String districtId) {
 
-        District district = districtRepository.findById(districtId).orElseThrow(()-> new RuntimeException("District not found!"));
+        District district = districtRepository.findByDistrictElectoralCode(districtId).orElseThrow(()-> new RuntimeException("District not found!"));
 
 
         return Response.builder()
@@ -86,14 +92,14 @@ public class DistrictServiceImp implements DistrictService {
     }
 
     @Override
-    public Response updateDistrict(Long districtId, DistrictDTO districtDTO) {
-        District district = districtRepository.findById(districtId).orElseThrow(()-> new RuntimeException("District not found!"));
+    public Response updateDistrict(String districtId, DistrictDTO districtDTO) {
+        District district = districtRepository.findByDistrictElectoralCode(districtId).orElseThrow(()-> new RuntimeException("District not found!"));
 
 
         if (districtDTO.getDistrictCapital() != null ) district.setDistrictCapital(districtDTO.getDistrictCapital());
-        if (districtDTO.getDistrictElectoralCode() != null ) district.setDistrictElectoralCode(districtDTO.getDistrictElectoralCode());
+//        if (districtDTO.getDistrictElectoralCode() != null ) district.setDistrictElectoralCode(districtDTO.getDistrictElectoralCode());
         if (districtDTO.getDistrictName() != null ) district.setDistrictName(districtDTO.getDistrictName());
-        if (districtDTO.getRegionId() != null ) district.setDistrictId(districtDTO.getRegionId());
+//        if (districtDTO.getRegionId() != null ) district.setDistrictId(districtDTO.getRegionId());
 
         districtRepository.save(district);
 
@@ -104,8 +110,8 @@ public class DistrictServiceImp implements DistrictService {
     }
 
     @Override
-    public Response deleteDistrict(Long districtId) {
-        Optional<District> optionalDistrict = districtRepository.findById(districtId);
+    public Response deleteDistrict(String districtId) {
+        Optional<District> optionalDistrict = districtRepository.findByDistrictElectoralCode(districtId);
 
         District district;
         if (optionalDistrict.isPresent()) {
@@ -119,15 +125,21 @@ public class DistrictServiceImp implements DistrictService {
     }
 
     @Override
-    public Response getConstituenciesByDistrict(Long districtId) {
-        District district = districtRepository.findById(districtId).orElseThrow(() -> new RuntimeException("District does not exist"));
+    public Response getConstituenciesByDistrict(String districtId) {
+        District district = districtRepository.findByDistrictElectoralCode(districtId).orElseThrow(() -> new RuntimeException("District does not exist"));
 
         List<Constituency> constituencies = constituencyRepository.findConstituenciesByDistrict(district);
 
-        List<ConstituencyDTO> constituencyDTOS = constituencies.stream().map(entityDTOMapper::mapConstituencyToContituencyDTO).collect(Collectors.toList());
+        List<ConstituencyDTO> constituencyDTOS = constituencies.stream().map(entityDTOMapper::mapConstituencyToConstituencyDTO).collect(Collectors.toList());
 
         return Response.builder()
                 .constituencyDTOList(constituencyDTOS)
                 .build();
+    }
+
+    @Override
+    public Response deleteAllDistricts() {
+        districtRepository.deleteAll();
+        return Response.builder().message("All districts deleted successfully").build();
     }
 }

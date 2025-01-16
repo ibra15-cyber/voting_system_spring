@@ -9,4 +9,6 @@ public interface VoterService {
     Response getVoterById(Long voterId);
     Response updateVoter(Long voterId, VoterDTO voterDTO);
     Response deleteVoter(Long voterId);
+
+    Response deleteAllVoters();
 }

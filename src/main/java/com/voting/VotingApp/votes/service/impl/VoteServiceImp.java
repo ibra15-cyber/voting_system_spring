@@ -82,6 +82,7 @@ public class VoteServiceImp implements VoteService {
 //        newVote.setConstituencyId(parliamentaryCandidate.getConstituency().getConstituencyId());
 
         voter.setVote(newVote);
+        newVote.setPollingStationId(String.valueOf(voter.getPollingStation().getPollingStationId()));
         voteRepository.save(newVote); //save vote
 
 //        //find the vote id of the voter and set it to voter property

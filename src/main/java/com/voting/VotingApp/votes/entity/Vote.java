@@ -38,6 +38,8 @@ public class Vote {
 
     private Long constituencyId; //will be pulled from the parliamentary candidate
 
+    private String pollingStationId;
+
     //just like we have orderItem, and orders, we shd have votes and voterItem aka presidentialCandidate
     //but the link btw product and order is orderItem
     //therefore the link between vote (n) and candidate  is ? so a valid vote, vote cast breaks the tie

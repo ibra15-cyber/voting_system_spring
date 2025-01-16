@@ -31,24 +31,24 @@ public class DistrictController {
     }
 
     @GetMapping("/{districtId}")
-    public ResponseEntity<Response> getDistrictsById(@PathVariable("districtId") Long districtId) {
+    public ResponseEntity<Response> getDistrictsById(@PathVariable("districtId") String districtId) {
         return ResponseEntity.status(HttpStatus.OK).body(districtService.getDistrictById(districtId));
     }
 
 
     @PutMapping("/{districtId}")
-    public ResponseEntity<Response> updateDistrictById(@PathVariable("districtId") Long districtId, @RequestBody DistrictDTO districtDTO) {
+    public ResponseEntity<Response> updateDistrictById(@PathVariable("districtId") String districtId, @RequestBody DistrictDTO districtDTO) {
         return ResponseEntity.status(HttpStatus.OK).body(districtService.updateDistrict(districtId, districtDTO));
     }
 
     @DeleteMapping("/{districtId}")
-    public ResponseEntity<Response> deleteDistrict(@PathVariable("districtId") Long districtId) {
+    public ResponseEntity<Response> deleteDistrict(@PathVariable("districtId") String districtId) {
         return ResponseEntity.status(HttpStatus.OK).body(districtService.deleteDistrict(districtId));
     }
 
 
     @GetMapping("/get-constituencies-by-district/{districtId}")
-    public ResponseEntity<Response> getConstituenciesByDistrict(@PathVariable("districtId") Long regionId) {
+    public ResponseEntity<Response> getConstituenciesByDistrict(@PathVariable("districtId") String regionId) {
         return ResponseEntity.status(HttpStatus.OK).body(districtService.getConstituenciesByDistrict(regionId));
     }
 

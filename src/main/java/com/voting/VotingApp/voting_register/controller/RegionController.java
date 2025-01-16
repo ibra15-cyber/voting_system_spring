@@ -30,24 +30,29 @@ public class RegionController {
     }
 
     @GetMapping("/{regionId}")
-    public ResponseEntity<Response> getRegionById(@PathVariable("regionId") Long regionId) {
-        return ResponseEntity.status(HttpStatus.OK).body(regionService.getRegionById(regionId));
+    public ResponseEntity<Response> getRegionById(@PathVariable("regionId") String regionCode) {
+        return ResponseEntity.status(HttpStatus.OK).body(regionService.getRegionById(regionCode));
     }
 
 
     @PutMapping("/{regionId}")
-    public ResponseEntity<Response> updateRegion(@PathVariable("regionId") Long regionId, @RequestBody RegionDTO regionDTO) {
+    public ResponseEntity<Response> updateRegion(@PathVariable("regionId") String regionId, @RequestBody RegionDTO regionDTO) {
         return ResponseEntity.status(HttpStatus.OK).body(regionService.updateRegion(regionId, regionDTO));
     }
 
     @DeleteMapping("/{regionId}")
-    public ResponseEntity<Response> deleteRegion(@PathVariable("regionId") Long regionId) {
+    public ResponseEntity<Response> deleteRegion(@PathVariable("regionId") String regionId) {
         return ResponseEntity.status(HttpStatus.OK).body(regionService.deleteRegion(regionId));
+    }
+
+    @DeleteMapping("/delete-all-regions")
+    public ResponseEntity<Response> deleteAllRegion() {
+        return ResponseEntity.status(HttpStatus.OK).body(regionService.deleteAllRegions());
     }
 
 
     @GetMapping("/get-districts-by-region/{regionId}")
-    public ResponseEntity<Response> getDistrictsByRegion(@PathVariable("regionId") Long regionId) {
+    public ResponseEntity<Response> getDistrictsByRegion(@PathVariable("regionId") String regionId) {
         return ResponseEntity.status(HttpStatus.OK).body(regionService.getDistrictsByRegion(regionId));
     }
 

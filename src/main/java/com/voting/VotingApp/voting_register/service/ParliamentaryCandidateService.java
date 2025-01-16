@@ -9,4 +9,6 @@ public interface ParliamentaryCandidateService {
     Response getCandidateById(Long candidateId);
     Response updateCandidate(Long candidateId, ParliamentaryCandidateDTO parliamentaryCandidateDTO);
     Response deleteCandidate(Long candidateId);
+
+    Response deleteAllPresidentialCandidates();
 }

@@ -4,6 +4,8 @@ import com.voting.VotingApp.votes.entity.Vote;
 import com.voting.VotingApp.voting_register.enums.Gender;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -17,7 +19,7 @@ public class Voter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long voterId;
 
-    private String voterNumber;
+    private Long voterNumber;
 //
 //    @Column(nullable = false)
 //    @NotBlank
@@ -41,5 +43,9 @@ public class Voter {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Vote vote;
+
+    @ManyToOne()
+    @JoinColumn(name="polling_station_electoral_code", referencedColumnName = "pollingStationCode")
+    private PollingStation pollingStation;
 
 }

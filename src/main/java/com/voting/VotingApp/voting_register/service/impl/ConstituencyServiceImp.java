@@ -42,12 +42,22 @@ public class ConstituencyServiceImp implements ConstituencyService {
         newConstituency.setConstituencyCapital(constituencyDTO.getConstituencyCapital());
         newConstituency.setConstituencyElectoralCode(constituencyDTO.getConstituencyElectoralCode());
 
-        District district = districtRepository.findById(constituencyDTO.getDistrictId())
+//        District district = districtRepository.findById(Long.valueOf(constituencyDTO.getDistrictElectoralCode())) //this wont work
+        District district = districtRepository.findByDistrictElectoralCode(constituencyDTO.getDistrictElectoralCode())
                 .orElseThrow(()-> new RuntimeException("District does not exist"));
 
-        newConstituency.setDistrict(district);
+        newConstituency.setDistrict(district); //we need the district, get it from the code
+
+        String districtElectoralCode = district.getDistrictElectoralCode();
+//        String regionElectoralCode = district.getRegion().getRegionElectoralCode();
+        newConstituency.setConstituencyElectoralCode(districtElectoralCode + constituencyDTO.getConstituencyElectoralCode());
 
         constituencyRepository.save(newConstituency);
+
+//        List<District> listOfDistricts = districtRepository.findAll();
+//        listOfDistricts.forEach(
+//                district1 -> System.out.println(district1.getDistrictElectoralCode())
+//        );
 
         return Response.builder()
                 .message("Constituency created successfully!")
@@ -63,7 +73,7 @@ public class ConstituencyServiceImp implements ConstituencyService {
             message = "No Constituency found";
         }
 
-        List<ConstituencyDTO> constituencyDTO = constituencies.stream().map(entityDTOMapper::mapConstituencyToContituencyDTO).collect(Collectors.toList());
+        List<ConstituencyDTO> constituencyDTO = constituencies.stream().map(entityDTOMapper::mapConstituencyToConstituencyDTO).collect(Collectors.toList());
 
         return Response.builder()
                 .constituencyDTOList(constituencyDTO)
@@ -73,38 +83,38 @@ public class ConstituencyServiceImp implements ConstituencyService {
 
 
     @Override
-    public Response getConstituencyById(Long constituencyId) {
-        Constituency constituency = constituencyRepository.findById(constituencyId).orElseThrow(()-> new RuntimeException("Constituency not found!"));
+    public Response getConstituencyById(String constituencyId) {
+        Constituency constituency = constituencyRepository.findByConstituencyElectoralCode(constituencyId).orElseThrow(()-> new RuntimeException("Constituency not found!"));
 
         return Response.builder()
                 .message("District retrieved successfully!")
-                .constituencyDTO(entityDTOMapper.mapConstituencyToContituencyDTO(constituency))
+                .constituencyDTO(entityDTOMapper.mapConstituencyToConstituencyDTO(constituency))
                 .build();
     }
 
     @Override
-    public Response updateConstituency(Long constituencyId, ConstituencyDTO constituencyDTO) {
-        Constituency constituency = constituencyRepository.findById(constituencyId).orElseThrow(()-> new RuntimeException("Constituency not found!"));
+    public Response updateConstituency(String constituencyId, ConstituencyDTO constituencyDTO) {
+        Constituency constituency = constituencyRepository.findByConstituencyElectoralCode(constituencyId).orElseThrow(()-> new RuntimeException("Constituency not found!"));
 
 
         if (constituencyDTO.getConstituencyCapital() != null ) constituency.setConstituencyCapital(constituencyDTO.getConstituencyCapital());
-        if (constituencyDTO.getConstituencyElectoralCode() != null ) constituency.setConstituencyElectoralCode(constituencyDTO.getConstituencyElectoralCode());
+//        if (constituencyDTO.getConstituencyElectoralCode() != null ) constituency.setConstituencyElectoralCode(constituencyDTO.getConstituencyElectoralCode());
         if (constituencyDTO.getConstituencyName() != null ) constituency.setConstituencyName(constituencyDTO.getConstituencyName());
 
-        District district = districtRepository.findById(constituencyDTO.getDistrictId()).orElseThrow(()-> new RuntimeException("District not found!"));
-        if (constituencyDTO.getDistrictId() != null ) constituency.setDistrict(district);
+        District district = districtRepository.findByDistrictElectoralCode(constituencyDTO.getDistrictElectoralCode()).orElseThrow(()-> new RuntimeException("District not found!"));
+        if (constituencyDTO.getDistrictElectoralCode() != null ) constituency.setDistrict(district);
 
         constituencyRepository.save(constituency);
 
         return Response.builder()
                 .message("District retrieved successfully!")
-                .constituencyDTO(entityDTOMapper.mapConstituencyToContituencyDTO(constituency))
+                .constituencyDTO(entityDTOMapper.mapConstituencyToConstituencyDTO(constituency))
                 .build();
     }
 
     @Override
-    public Response deleteConstituency(Long constituencyId) {
-        Optional<Constituency> optionalConstituency = constituencyRepository.findById(constituencyId);
+    public Response deleteConstituency(String constituencyId) {
+        Optional<Constituency> optionalConstituency = constituencyRepository.findByConstituencyElectoralCode(constituencyId);
 
         Constituency constituency;
         if (optionalConstituency.isPresent()) {
@@ -118,13 +128,20 @@ public class ConstituencyServiceImp implements ConstituencyService {
     }
 
     @Override
-    public Response getParliamentaryCandidatesByConstituency(Long constituencyId) {
-        Constituency constituency = constituencyRepository.findById(constituencyId).orElseThrow(()-> new RuntimeException("Constituency does not exist"));
+    public Response getParliamentaryCandidatesByConstituency(String constituencyId) {
+        Constituency constituency = constituencyRepository.findByConstituencyElectoralCode(constituencyId).orElseThrow(()-> new RuntimeException("Constituency does not exist"));
 
         List<ParliamentaryCandidate> parliamentaryCandidates = parliamentaryCandidateRepository.findParliamentaryCandidateByConstituency(constituency);
 
         List<ParliamentaryCandidateDTO> parliamentaryCandidateDTOS = parliamentaryCandidates.stream().map(entityDTOMapper::parliamentaryCandidateToParliamentaryCandidateDTO).collect(Collectors.toList());
 
         return Response.builder().parliamentaryCandidateDTOList(parliamentaryCandidateDTOS).build();
+    }
+
+    @Override
+    public Response deleteAllConstituencies(){
+        constituencyRepository.deleteAll();
+        return Response.builder().message("deleted successful").build();
+
     }
 }

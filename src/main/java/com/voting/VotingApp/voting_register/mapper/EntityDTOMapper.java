@@ -3,6 +3,7 @@ package com.voting.VotingApp.voting_register.mapper;
 import com.voting.VotingApp.voting_register.dto.*;
 import com.voting.VotingApp.voting_register.entity.*;
 import com.voting.VotingApp.voting_register.enums.Gender;
+import com.voting.VotingApp.voting_register.enums.PoliticalParty;
 import com.voting.VotingApp.voting_register.repository.ConstituencyRepository;
 import com.voting.VotingApp.voting_register.repository.VoterRepository;
 import org.springframework.stereotype.Component;
@@ -32,17 +33,19 @@ public class EntityDTOMapper {
         DistrictDTO districtDTO = new DistrictDTO();
 
         districtDTO.setDistrictName(district.getDistrictName());
-        districtDTO.setRegionId(district.getRegion().getRegionId());
+//        districtDTO.setRegionId(district.getRegion().getRegionId());
         districtDTO.setDistrictElectoralCode(district.getDistrictElectoralCode());
         districtDTO.setDistrictCapital(district.getDistrictCapital());
+        districtDTO.setDistrictElectoralCode(district.getDistrictElectoralCode());
+        districtDTO.setRegionElectoralCode(district.getRegion().getRegionElectoralCode());
 
         return districtDTO;
     }
 
-    public ConstituencyDTO mapConstituencyToContituencyDTO(Constituency constituency){
+    public ConstituencyDTO mapConstituencyToConstituencyDTO(Constituency constituency){
         ConstituencyDTO constituencyDTO = new ConstituencyDTO();
         constituencyDTO.setConstituencyName(constituency.getConstituencyName());
-        constituencyDTO.setDistrictId(constituency.getConstituencyId());
+        constituencyDTO.setDistrictElectoralCode(constituency.getConstituencyElectoralCode());
         constituencyDTO.setConstituencyCapital(constituency.getConstituencyCapital());
         constituencyDTO.setConstituencyElectoralCode(constituency.getConstituencyElectoralCode());
         constituencyDTO.setConstituencyTotalVotes(constituency.getConstituencyTotalVotesCast());
@@ -58,7 +61,8 @@ public class EntityDTOMapper {
         voterDTO.setGender(voter.getGender());
         voterDTO.setFirstName(voter.getFirstName());
         voterDTO.setLastName(voter.getLastName());
-        voterDTO.setConstituencyId(voter.getConstituency().getConstituencyId());
+        voterDTO.setConstituencyElectoralCode(voter.getConstituency().getConstituencyElectoralCode());
+        voterDTO.setVoterPollingStationElectoralCode(voter.getPollingStation().getPollingStationCode());
 
         return voterDTO;
     }
@@ -73,22 +77,37 @@ public class EntityDTOMapper {
         parliamentaryCandidateDTO.setAge(parliamentaryCandidate.getAge());
         parliamentaryCandidateDTO.setTotalVotesAttain(parliamentaryCandidate.getTotalVotesAttained());
 
-        parliamentaryCandidateDTO.setConstituencyId(parliamentaryCandidate.getConstituency().getConstituencyId());
+        parliamentaryCandidateDTO.setConstituencyElectoralCode(parliamentaryCandidate.getConstituency().getConstituencyElectoralCode());
+        parliamentaryCandidateDTO.setVoterIdCardNumber(parliamentaryCandidate.getParliamentaryCandidateNumber());
+        parliamentaryCandidateDTO.setPoliticalParty(PoliticalParty.valueOf(parliamentaryCandidate.getPoliticalParty()));
 
         return parliamentaryCandidateDTO;
     }
 
-    public ParliamentaryCandidateDTO presidentialCandidateToPresidentialCandidateDTO(PresidentialCandidate presidentialCandidate) {
+    public PresidentialCandidateDTO presidentialCandidateToPresidentialCandidateDTO(PresidentialCandidate presidentialCandidate) {
 
-        ParliamentaryCandidateDTO parliamentaryCandidateDTO = new ParliamentaryCandidateDTO();
+        PresidentialCandidateDTO presidentialCandidateDTO = new PresidentialCandidateDTO();
 
-        parliamentaryCandidateDTO.setFirstName(presidentialCandidate.getFirstName());
-        parliamentaryCandidateDTO.setLastName(presidentialCandidate.getLastName());
-        parliamentaryCandidateDTO.setGender(Gender.valueOf(presidentialCandidate.getGender()));
-        parliamentaryCandidateDTO.setAge(presidentialCandidate.getAge());
-        parliamentaryCandidateDTO.setTotalVotesAttain(presidentialCandidate.getTotalVotesAttained());
+        presidentialCandidateDTO.setFirstName(presidentialCandidate.getFirstName());
+        presidentialCandidateDTO.setLastName(presidentialCandidate.getLastName());
+        presidentialCandidateDTO.setGender(Gender.valueOf(presidentialCandidate.getGender()));
+        presidentialCandidateDTO.setAge(presidentialCandidate.getAge());
+        presidentialCandidateDTO.setPoliticalParty(PoliticalParty.valueOf(presidentialCandidate.getPoliticalParty()));
+        presidentialCandidateDTO.setTotalVotesAttain(presidentialCandidate.getTotalVotesAttained());
+        presidentialCandidateDTO.setPresidentialIdCardNumber(presidentialCandidate.getPresidentialVoterIdNumber());
 
 
-        return parliamentaryCandidateDTO;
+
+        return presidentialCandidateDTO;
+    }
+
+    public PollingStationDTO mapPollingStationToPollingStationDTO(PollingStation pollingStation) {
+        PollingStationDTO pollingStationDTO = new PollingStationDTO();
+
+        pollingStationDTO.setPollingStationName(pollingStation.getPollingStationName());
+        pollingStationDTO.setPollingStationCode(pollingStation.getPollingStationCode());
+        pollingStationDTO.setConstituencyCode(pollingStation.getConstituency().getConstituencyElectoralCode());
+        pollingStationDTO.setTotalVoteCastAtPollingStation(pollingStation.getTotalVoteCastAtPollingStation());
+        return pollingStationDTO;
     }
 }

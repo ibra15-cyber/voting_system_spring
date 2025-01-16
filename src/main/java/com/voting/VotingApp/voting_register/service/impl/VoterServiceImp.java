@@ -1,13 +1,11 @@
 package com.voting.VotingApp.voting_register.service.impl;
 
 import com.voting.VotingApp.voting_register.dto.VoterDTO;
-import com.voting.VotingApp.voting_register.entity.Constituency;
-import com.voting.VotingApp.voting_register.entity.District;
-import com.voting.VotingApp.voting_register.entity.Region;
-import com.voting.VotingApp.voting_register.entity.Voter;
+import com.voting.VotingApp.voting_register.entity.*;
 import com.voting.VotingApp.voting_register.dto.Response;
 import com.voting.VotingApp.voting_register.mapper.EntityDTOMapper;
 import com.voting.VotingApp.voting_register.repository.ConstituencyRepository;
+import com.voting.VotingApp.voting_register.repository.PollingStationRepository;
 import com.voting.VotingApp.voting_register.repository.VoterRepository;
 import com.voting.VotingApp.voting_register.service.VoterService;
 import org.springframework.stereotype.Service;
@@ -21,11 +19,13 @@ public class VoterServiceImp implements VoterService {
     private final VoterRepository voterRepository;
     private final ConstituencyRepository constituencyRepository;
     private final EntityDTOMapper entityDTOMapper;
+    private final PollingStationRepository pollingStationRepository;
 
-    public VoterServiceImp(VoterRepository voterRepository, ConstituencyRepository constituencyRepository, EntityDTOMapper entityDTOMapper) {
+    public VoterServiceImp(VoterRepository voterRepository, ConstituencyRepository constituencyRepository, EntityDTOMapper entityDTOMapper, PollingStationRepository pollingStationRepository, PollingStationRepository pollingStationRepository1) {
         this.voterRepository = voterRepository;
         this.constituencyRepository = constituencyRepository;
         this.entityDTOMapper = entityDTOMapper;
+        this.pollingStationRepository = pollingStationRepository1;
     }
 
     @Override
@@ -42,13 +42,14 @@ public class VoterServiceImp implements VoterService {
         newVoter.setLastName(voterDTO.getLastName());
         newVoter.setVoterNumber(voterDTO.getVoterNumber());
 
-        Constituency constituency = constituencyRepository.findById(voterDTO.getConstituencyId()).orElseThrow( () -> new RuntimeException("Constituency does not exist"));
+        Constituency constituency = constituencyRepository.findByConstituencyElectoralCode(voterDTO.getConstituencyElectoralCode()).orElseThrow( () -> new RuntimeException("Constituency does not exist"));
         newVoter.setConstituency(constituency);
 
         District district = constituency.getDistrict();
         Region region = district.getRegion();
 
-
+        PollingStation pollingStation = pollingStationRepository.findByPollingStationCode(voterDTO.getVoterPollingStationElectoralCode()).orElseThrow(()-> new RuntimeException("Polling Station not found"));
+        newVoter.setPollingStation(pollingStation);
 
         voterRepository.save(newVoter);
 
@@ -56,7 +57,7 @@ public class VoterServiceImp implements VoterService {
                 .message("Voter created successfully!")
                 .regionDTO( entityDTOMapper.mapRegionToRegionDTO(region))
                 .districtDTO(entityDTOMapper.mapDistrictToDistrictDTO(district))
-                .constituencyDTO(entityDTOMapper.mapConstituencyToContituencyDTO(constituency))
+                .constituencyDTO(entityDTOMapper.mapConstituencyToConstituencyDTO(constituency))
                 .build();
     }
 
@@ -76,8 +77,8 @@ public class VoterServiceImp implements VoterService {
     }
 
     @Override
-    public Response getVoterById(Long voterId) {
-       Voter voter  = voterRepository.findById(voterId).orElseThrow(() -> new RuntimeException("Voter note found!"));
+    public Response getVoterById(Long voterNumber) {
+       Voter voter  = voterRepository.findByVoterNumber(voterNumber).orElseThrow(() -> new RuntimeException("Voter note found!"));
 
         return Response.builder()
                 .voterDTO(entityDTOMapper.mapVoterToVoterDTO(voter))
@@ -86,8 +87,8 @@ public class VoterServiceImp implements VoterService {
 
 
     @Override
-    public Response updateVoter(Long voterId, VoterDTO voterDTO) {
-        Voter voter  = voterRepository.findById(voterId).orElseThrow(() -> new RuntimeException("Voter note found!"));
+    public Response updateVoter(Long voterNumber, VoterDTO voterDTO) {
+        Voter voter  = voterRepository.findByVoterNumber(voterNumber).orElseThrow(() -> new RuntimeException("Voter note found!"));
 
         if (voterDTO.getVoterNumber() != null ) voter.setVoterNumber(voterDTO.getVoterNumber());
         if (voterDTO.getAge() == voter.getAge()) voter.setAge(voterDTO.getAge());
@@ -98,17 +99,24 @@ public class VoterServiceImp implements VoterService {
         voterRepository.save(voter);
 
         return Response.builder()
+                .message("Voter updated successfully")
                 .build();
     }
 
     @Override
-    public Response deleteVoter(Long voterId) {
-        Voter voter  = voterRepository.findById(voterId).orElseThrow(() -> new RuntimeException("Voter note found!"));
+    public Response deleteVoter(Long voterNumber) {
+        Voter voter  = voterRepository.findByVoterNumber(voterNumber).orElseThrow(() -> new RuntimeException("Voter note found!"));
 
         voterRepository.delete(voter);
 
         return Response.builder()
                 .message("Voter deleted successfully")
                 .build();
+    }
+
+    @Override
+    public  Response deleteAllVoters() {
+        voterRepository.deleteAll();
+        return Response.builder().message("All voters deleted successfully").build();
     }
 }

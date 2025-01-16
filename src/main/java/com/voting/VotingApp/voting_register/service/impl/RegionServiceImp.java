@@ -60,9 +60,9 @@ public class RegionServiceImp implements RegionService {
     }
 
     @Override
-    public Response getRegionById(Long regionId) {
+    public Response getRegionById(String regionCode) {
 
-        Region region = regionRepository.findById(regionId)
+        Region region = regionRepository.findByRegionElectoralCode(regionCode)
                 .orElseThrow(()-> new RuntimeException("region does not exist"));
 
         return Response.builder()
@@ -72,14 +72,14 @@ public class RegionServiceImp implements RegionService {
     }
 
     @Override
-    public Response updateRegion(Long regionId, RegionDTO regionDTO) {
+    public Response updateRegion(String regionCode, RegionDTO regionDTO) {
 
-        Region region = regionRepository.findById(regionId)
+        Region region = regionRepository.findByRegionElectoralCode(regionCode)
                 .orElseThrow(()-> new RuntimeException("region does not exist"));
 
         if(regionDTO.getRegionalCapital() != null) region.setRegionalCapital(regionDTO.getRegionalCapital());
         if(regionDTO.getRegionalCapital() != null) region.setRegionName(regionDTO.getRegionName());
-        if(regionDTO.getRegionElectoralCode() != null) region.setRegionElectoralCode(regionDTO.getRegionElectoralCode());
+//        if(regionDTO.getRegionElectoralCode() != null) region.setRegionElectoralCode(regionDTO.getRegionElectoralCode());
 
         regionRepository.save(region);
 
@@ -91,9 +91,9 @@ public class RegionServiceImp implements RegionService {
 
 
     @Override
-    public Response deleteRegion(Long regionId) {
+    public Response deleteRegion(String regionCode) {
 
-        Region region = regionRepository.findById(regionId)
+        Region region = regionRepository.findByRegionElectoralCode(regionCode)
                 .orElseThrow(()-> new RuntimeException("region does not exist"));
 
         regionRepository.delete(region);
@@ -103,9 +103,9 @@ public class RegionServiceImp implements RegionService {
     }
 
     @Override
-    public Response getDistrictsByRegion(Long regionId) {
+    public Response getDistrictsByRegion(String regionCode) {
 
-        Region region = regionRepository.findById(regionId)
+        Region region = regionRepository.findByRegionElectoralCode(regionCode)
                 .orElseThrow(()-> new RuntimeException("region does not exist"));
 
         List<District> districts = districtRepository.findDistrictsByRegion(region);
@@ -119,8 +119,11 @@ public class RegionServiceImp implements RegionService {
                 .build();
     }
 
-
-
+    @Override
+    public Response deleteAllRegions() {
+        regionRepository.deleteAll();
+        return Response.builder().message("All regions deleted successfully").build();
+    }
 
 
 }

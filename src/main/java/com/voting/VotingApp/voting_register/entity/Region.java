@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-@Table(name="Regions")
+@Table(name="regions")
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,6 +31,7 @@ public class Region {
 
     private Long regionalTotalVotesCast;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "region", cascade = CascadeType.ALL, orphanRemoval = true )
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<District> districts;
 }

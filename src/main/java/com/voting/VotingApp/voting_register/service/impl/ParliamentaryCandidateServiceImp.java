@@ -35,10 +35,11 @@ public class ParliamentaryCandidateServiceImp implements ParliamentaryCandidateS
         parliamentaryCandidate.setLastName(parliamentaryCandidateDTO.getLastName());
         parliamentaryCandidate.setAge(parliamentaryCandidateDTO.getAge());
         parliamentaryCandidate.setGender(parliamentaryCandidateDTO.getGender().toString());
-        parliamentaryCandidate.setPoliticalParty(parliamentaryCandidateDTO.getPoliticalParty());
+        parliamentaryCandidate.setPoliticalParty(parliamentaryCandidateDTO.getPoliticalParty().toString());
+        parliamentaryCandidate.setParliamentaryCandidateNumber(parliamentaryCandidateDTO.getVoterIdCardNumber());
 
         //don't do this is mapper. this means we can use id from dto to get us an object in service to map with real dto data
-        Constituency constituency= constituencyRepository.findById(parliamentaryCandidateDTO.getConstituencyId()).orElseThrow(()-> new RuntimeException("Constituency not found"));
+        Constituency constituency= constituencyRepository.findByConstituencyElectoralCode(parliamentaryCandidateDTO.getConstituencyElectoralCode()).orElseThrow(()-> new RuntimeException("Constituency not found"));
         parliamentaryCandidate.setConstituency(constituency);
 
 
@@ -68,7 +69,7 @@ public class ParliamentaryCandidateServiceImp implements ParliamentaryCandidateS
 
     @Override
     public Response getCandidateById(Long candidateId) {
-       ParliamentaryCandidate parliamentaryCandidate =  parliamentaryCandidateRepository.findById(candidateId).orElseThrow(()-> new RuntimeException("Parliamentary candidate not found!"));
+       ParliamentaryCandidate parliamentaryCandidate =  parliamentaryCandidateRepository.findByParliamentaryCandidateNumber(candidateId).orElseThrow(()-> new RuntimeException("Parliamentary candidate not found!"));
 
        ParliamentaryCandidateDTO parliamentaryCandidateDTO = entityDTOMapper.parliamentaryCandidateToParliamentaryCandidateDTO(parliamentaryCandidate);
 
@@ -79,16 +80,16 @@ public class ParliamentaryCandidateServiceImp implements ParliamentaryCandidateS
 
     @Override
     public Response updateCandidate(Long candidateId, ParliamentaryCandidateDTO parliamentaryCandidateDTO) {
-        ParliamentaryCandidate parliamentaryCandidate =  parliamentaryCandidateRepository.findById(candidateId).orElseThrow(()-> new RuntimeException("Parliamentary candidate not found!"));
+        ParliamentaryCandidate parliamentaryCandidate =  parliamentaryCandidateRepository.findByParliamentaryCandidateNumber(candidateId).orElseThrow(()-> new RuntimeException("Parliamentary candidate not found!"));
 
         if (parliamentaryCandidateDTO.getFirstName() != null) parliamentaryCandidate.setFirstName(parliamentaryCandidateDTO.getFirstName());
         if (parliamentaryCandidateDTO.getLastName() != null) parliamentaryCandidate.setLastName(parliamentaryCandidateDTO.getLastName());
-        if (parliamentaryCandidateDTO.getGender() != null) parliamentaryCandidate.setGender(String.valueOf(parliamentaryCandidateDTO.getGender()));
-        if (parliamentaryCandidateDTO.getPoliticalParty() != null) parliamentaryCandidate.setPoliticalParty(parliamentaryCandidateDTO.getPoliticalParty());
+        if (parliamentaryCandidateDTO.getGender() != null) parliamentaryCandidate.setGender(parliamentaryCandidateDTO.getGender().toString());
+        if (parliamentaryCandidateDTO.getPoliticalParty() != null) parliamentaryCandidate.setPoliticalParty(parliamentaryCandidateDTO.getPoliticalParty().toString());
         if (parliamentaryCandidateDTO.getAge() != null ) parliamentaryCandidate.setAge(parliamentaryCandidateDTO.getAge());
 
-        if (parliamentaryCandidateDTO.getConstituencyId() != null) {
-            Constituency constituency = constituencyRepository.findById(parliamentaryCandidateDTO.getConstituencyId()).orElseThrow(() -> new RuntimeException("Constituency not found"));
+        if (parliamentaryCandidateDTO.getConstituencyElectoralCode() != null) {
+            Constituency constituency = constituencyRepository.findByConstituencyElectoralCode(parliamentaryCandidateDTO.getConstituencyElectoralCode()).orElseThrow(() -> new RuntimeException("Constituency not found"));
             parliamentaryCandidate.setConstituency(constituency);
         }
 
@@ -104,10 +105,16 @@ public class ParliamentaryCandidateServiceImp implements ParliamentaryCandidateS
 
     @Override
     public Response deleteCandidate(Long candidateId) {
-        ParliamentaryCandidate parliamentaryCandidate =  parliamentaryCandidateRepository.findById(candidateId).orElseThrow(()-> new RuntimeException("Parliamentary candidate not found!"));
+        ParliamentaryCandidate parliamentaryCandidate =  parliamentaryCandidateRepository.findByParliamentaryCandidateNumber(candidateId).orElseThrow(()-> new RuntimeException("Parliamentary candidate not found!"));
 
         parliamentaryCandidateRepository.delete(parliamentaryCandidate);;
 
         return Response.builder().message("Candidate deleted successfully!").build();
+    }
+
+    @Override
+    public Response deleteAllPresidentialCandidates() {
+        parliamentaryCandidateRepository.deleteAll();
+        return Response.builder().message("All parliamentary canddiates deleted").build();
     }
 }

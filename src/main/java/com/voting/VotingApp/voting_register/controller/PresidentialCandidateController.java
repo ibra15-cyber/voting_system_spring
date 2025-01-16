@@ -33,8 +33,8 @@ public class PresidentialCandidateController {
     }
 
     @GetMapping("/{candidateId}")
-    public ResponseEntity<Response> getPrCandidateById(@PathVariable("candidateId") Long candidateId) {
-        return ResponseEntity.status(HttpStatus.OK).body(presidentialCandidateService.getPrCandidateById(candidateId));
+    public ResponseEntity<Response> getPrCandidateById(@PathVariable("candidateId") Long voterIdNumber) {
+        return ResponseEntity.status(HttpStatus.OK).body(presidentialCandidateService.getPrCandidateById(voterIdNumber));
     }
 
 

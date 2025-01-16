@@ -29,24 +29,24 @@ public class ConstituencyController {
     }
 
     @GetMapping("/{constituencyId}")
-    public ResponseEntity<Response> getConstituencyById(@PathVariable("constituencyId") Long constituencyId) {
+    public ResponseEntity<Response> getConstituencyById(@PathVariable("constituencyId") String constituencyId) {
         return ResponseEntity.status(HttpStatus.OK).body(constituencyService.getConstituencyById(constituencyId));
     }
 
 
     @PutMapping("/{constituencyId}")
-    public ResponseEntity<Response> updateConstituency(@PathVariable("constituencyId") Long constituencyId, @RequestBody ConstituencyDTO constituencyDTO) {
+    public ResponseEntity<Response> updateConstituency(@PathVariable("constituencyId") String constituencyId, @RequestBody ConstituencyDTO constituencyDTO) {
         return ResponseEntity.status(HttpStatus.OK).body(constituencyService.updateConstituency(constituencyId, constituencyDTO));
     }
 
     @DeleteMapping("/{constituencyId}")
-    public ResponseEntity<Response> deleteConstituency(@PathVariable("constituencyId") Long constituencyId) {
+    public ResponseEntity<Response> deleteConstituency(@PathVariable("constituencyId") String constituencyId) {
         return ResponseEntity.status(HttpStatus.OK).body(constituencyService.deleteConstituency(constituencyId));
     }
 
 
     @GetMapping("/get-mps-by-constituency/{constituencyId}")
-    public ResponseEntity<Response> getParliamentaryCandidatesByConstituency(@PathVariable("constituencyId") Long constituencyId) {
+    public ResponseEntity<Response> getParliamentaryCandidatesByConstituency(@PathVariable("constituencyId") String constituencyId) {
         return ResponseEntity.status(HttpStatus.OK).body(constituencyService.getParliamentaryCandidatesByConstituency(constituencyId));
     }
 

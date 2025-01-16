@@ -27,5 +27,9 @@ public class Response {
     private Long totalVoteCastNationwide;
     private  List<ConstituencyPresidentialVoteSummary> presidentialVoteSummaryByConstituencies;
     private List<DistrictPresidentialVoteSummary> presidentialVoteSummaryByDistricts;
+    private PollingStationDTO pollingStationDTO;
+    private List<PollingStationDTO> pollingStationDTOList;
+    private PresidentialCandidateDTO presidentialCandidateDTO;
+    private List<PresidentialCandidateDTO> presidentialCandidateDTOList;
 
 }

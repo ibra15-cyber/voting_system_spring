@@ -13,11 +13,9 @@ import org.springframework.web.bind.annotation.*;
 public class VoterController {
 
     private final VoterService voterService;
-    private final VoterRepository voterRepository;
 
-    public VoterController(VoterService voterService, VoterRepository voterRepository) {
+    public VoterController(VoterService voterService) {
         this.voterService = voterService;
-        this.voterRepository = voterRepository;
     }
 
 

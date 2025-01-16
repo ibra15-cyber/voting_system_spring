@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -25,19 +27,23 @@ public class Constituency {
     @Column(unique = true)
     private String constituencyElectoralCode;
 
-    @Column(unique = true)
     private String constituencyCapital;
 
     private Long constituencyTotalVotesCast;
 
-    @ManyToOne
-    @JoinColumn(name = "district_id" )
+    @ManyToOne()
+    @JoinColumn(name = "district_electoral_code", referencedColumnName = "districtElectoralCode") // Mapping by code
     private District district;
 
     @OneToMany()
     private List<Voter> voter;
 
-    @OneToMany()
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     private List<ParliamentaryCandidate> parliamentaryCandidates;
+
+
+    @OneToMany(mappedBy = "constituency", cascade = CascadeType.ALL,orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<PollingStation> listOfPollingStations;
 
 }

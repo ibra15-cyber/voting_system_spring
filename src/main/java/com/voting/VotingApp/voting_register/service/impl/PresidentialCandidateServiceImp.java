@@ -33,7 +33,8 @@ public class PresidentialCandidateServiceImp implements PresidentialCandidateSer
         presidentialCandidate.setLastName(presidentialCandidateDTO.getLastName());
         presidentialCandidate.setAge(presidentialCandidateDTO.getAge());
         presidentialCandidate.setGender(presidentialCandidateDTO.getGender().toString());
-        presidentialCandidate.setPoliticalParty(presidentialCandidateDTO.getPoliticalParty());
+        presidentialCandidate.setPoliticalParty(presidentialCandidateDTO.getPoliticalParty().toString());
+        presidentialCandidate.setPresidentialVoterIdNumber(presidentialCandidateDTO.getPresidentialIdCardNumber());
 
         presidentialCandidateRepository.save(presidentialCandidate);
 
@@ -46,51 +47,57 @@ public class PresidentialCandidateServiceImp implements PresidentialCandidateSer
     public Response getAllPrCandidates() {
         List<PresidentialCandidate> presidentialCandidates =  presidentialCandidateRepository.findAll();
 
-        List<ParliamentaryCandidateDTO> parliamentaryCandidateDTOList = presidentialCandidates.stream()
+        List<PresidentialCandidateDTO> presidentialCandidateDTOList = presidentialCandidates.stream()
                 .map(entityDTOMapper::presidentialCandidateToPresidentialCandidateDTO).toList();
 
         return Response.builder()
-                .parliamentaryCandidateDTOList(parliamentaryCandidateDTOList)
+                .presidentialCandidateDTOList(presidentialCandidateDTOList)
                 .build();
     }
 
 
     @Override
     public Response getPrCandidateById(Long candidateId) {
-       PresidentialCandidate presidentialCandidate =  presidentialCandidateRepository.findById(candidateId).orElseThrow(()-> new RuntimeException("Presidential candidate not found!"));
+       PresidentialCandidate presidentialCandidate =  presidentialCandidateRepository.findByPresidentialVoterIdNumber(candidateId).orElseThrow(()-> new RuntimeException("Presidential candidate not found!"));
 
-       ParliamentaryCandidateDTO parliamentaryCandidateDTO = entityDTOMapper.presidentialCandidateToPresidentialCandidateDTO(presidentialCandidate);
+       PresidentialCandidateDTO presidentialCandidateDTO = entityDTOMapper.presidentialCandidateToPresidentialCandidateDTO(presidentialCandidate);
 
         return Response.builder()
-                .parliamentaryCandidateDTO(parliamentaryCandidateDTO)
+                .presidentialCandidateDTO(presidentialCandidateDTO)
                 .build();
     }
 
     @Override
     public Response updatePrCandidate(Long candidateId, PresidentialCandidateDTO presidentialCandidateDTO) {
-        PresidentialCandidate presidentialCandidate =  presidentialCandidateRepository.findById(candidateId).orElseThrow(()-> new RuntimeException("Presidential candidate not found!"));
+        PresidentialCandidate presidentialCandidate =  presidentialCandidateRepository.findByPresidentialVoterIdNumber(candidateId).orElseThrow(()-> new RuntimeException("Presidential candidate not found!"));
 
         if (presidentialCandidateDTO.getFirstName() != null) presidentialCandidate.setFirstName(presidentialCandidateDTO.getFirstName());
         if (presidentialCandidateDTO.getLastName() != null) presidentialCandidate.setLastName(presidentialCandidateDTO.getLastName());
         if (presidentialCandidateDTO.getGender() != null) presidentialCandidate.setGender(String.valueOf(presidentialCandidateDTO.getGender()));
-        if (presidentialCandidateDTO.getPoliticalParty() != null) presidentialCandidate.setPoliticalParty(presidentialCandidateDTO.getPoliticalParty());
+        if (presidentialCandidateDTO.getPoliticalParty() != null) presidentialCandidate.setPoliticalParty(presidentialCandidateDTO.getPoliticalParty().toString());
         if (presidentialCandidateDTO.getAge() != null ) presidentialCandidate.setAge(presidentialCandidateDTO.getAge());
 
         presidentialCandidateRepository.save(presidentialCandidate);
 
-        ParliamentaryCandidateDTO parliamentaryCandidateDTO1 = entityDTOMapper.presidentialCandidateToPresidentialCandidateDTO(presidentialCandidate);
+        PresidentialCandidateDTO presidentialCandidateDTO1 = entityDTOMapper.presidentialCandidateToPresidentialCandidateDTO(presidentialCandidate);
 
         return Response.builder()
-                .parliamentaryCandidateDTO(parliamentaryCandidateDTO1)
+                .presidentialCandidateDTO(presidentialCandidateDTO1)
                 .build();
     }
 
     @Override
     public Response deletePrCandidate(Long candidateId) {
-        PresidentialCandidate presidentialCandidate =  presidentialCandidateRepository.findById(candidateId).orElseThrow(()-> new RuntimeException("Presidential candidate not found!"));
+        PresidentialCandidate presidentialCandidate =  presidentialCandidateRepository.findByPresidentialVoterIdNumber(candidateId).orElseThrow(()-> new RuntimeException("Presidential candidate not found!"));
 
         presidentialCandidateRepository.delete(presidentialCandidate);;
 
         return Response.builder().message("Candidate deleted successfully!").build();
+    }
+
+    @Override
+    public Response deleteAllPresidentialCandidates(){
+        presidentialCandidateRepository.deleteAll();
+        return Response.builder().message("all presidential candidates deleted successfullly").build();
     }
 }

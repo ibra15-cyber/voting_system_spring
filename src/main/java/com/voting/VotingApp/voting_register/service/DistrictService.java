@@ -7,9 +7,10 @@ import com.voting.VotingApp.voting_register.entity.District;
 public interface DistrictService {
     Response getAllDistricts();
     Response createDistrict(DistrictDTO districtDTO);
-    Response getDistrictById(Long districtId);
-    Response updateDistrict(Long districtId, DistrictDTO districtDTO);
-    Response deleteDistrict(Long districtId);
+    Response getDistrictById(String districtId);
+    Response updateDistrict(String districtId, DistrictDTO districtDTO);
+    Response deleteDistrict(String districtId);
 
-    Response getConstituenciesByDistrict(Long districtId);
+    Response getConstituenciesByDistrict(String districtId);
+    Response deleteAllDistricts();
 }

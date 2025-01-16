@@ -38,17 +38,20 @@ public class ParliamentaryCandidate {
 
 //    @Column(nullable = false)
 //    @NotBlank
-    @Column(unique = true)
-    private PoliticalParty politicalParty;
+    private String politicalParty;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vote> voteList;
 
     @ManyToOne
-    @JoinColumn(name = "constituency_id")
+    @JoinColumn(name = "constituency_electoral_code", referencedColumnName = "constituencyElectoralCode")
     private Constituency constituency;
 
 
     private Long totalVotesAttained;
+
+    //I could have a relationship between voter and parliamentary candidate, but I choose not be because, there is negligible no of voters that will be contesting
+    //I choose to add a denomalized property to this entity to take the voters id number, which is even simpler.
+    private Long parliamentaryCandidateNumber;
 
 }

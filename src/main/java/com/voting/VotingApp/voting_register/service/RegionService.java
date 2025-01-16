@@ -6,9 +6,11 @@ import com.voting.VotingApp.voting_register.dto.Response;
 public interface RegionService {
     Response getAllRegions();
     Response createRegion(RegionDTO regionDTO);
-    Response getRegionById(Long regionId);
-    Response updateRegion(Long regionId, RegionDTO regionDTO);
-    Response deleteRegion(Long regionId);
+    Response getRegionById(String regionCode);
+    Response updateRegion(String regionCode, RegionDTO regionDTO);
+    Response deleteRegion(String regionCode);
 
-    Response getDistrictsByRegion(Long regionId);
+    Response getDistrictsByRegion(String regionId);
+    Response deleteAllRegions();
+
 }

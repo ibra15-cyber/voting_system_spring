@@ -14,4 +14,6 @@ public interface PresidentialCandidateService {
     Response updatePrCandidate(Long candidateId, PresidentialCandidateDTO presidentialCandidateDTO);
 
     Response deletePrCandidate(Long candidateId);
+
+    Response deleteAllPresidentialCandidates();
 }
