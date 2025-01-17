@@ -138,8 +138,7 @@ public class VoteServiceImp implements VoteService {
 
         //for a region
         List<Vote> listOfVotesForParticularPresidentialCandidateAtARegion = voteRepository.findVotesByPresidentialCandidateAndRegionalCode(presidentialCandidate, regionCode);
-        Long totalPR = (long) listOfVotesForParticularPresidentialCandidateAtARegion.size();
-//        presidentialCandidate.setTotalVotesAttained(totalPR);
+        Long totalPRR = (long) listOfVotesForParticularPresidentialCandidateAtARegion.size();
 
         //across nation
         List<Vote> listOfVotesForParticularPresidentialCandidate = voteRepository.findVotesByPresidentialCandidate(presidentialCandidate);
@@ -168,7 +167,13 @@ public class VoteServiceImp implements VoteService {
         constituencyPresidentialVoteSummaryRepository.save(constituencyPresidentialVoteSummary);
 
         // set the region presidential vote summary
+        RegionalPresidentialVoteSummary regionalPresidentialVoteSummary = new RegionalPresidentialVoteSummary();
 
+        regionalPresidentialVoteSummary.setRegionId(regionCode);
+        regionalPresidentialVoteSummary.setPresidentialCandidateId(presidentialCandidate.getPresidentialCandidateId());
+        regionalPresidentialVoteSummary.setPresidentialCandidateVoteTotal(totalPRR);
+
+        regionalPresidentialVoteSummaryRepository.save(regionalPresidentialVoteSummary);
 //
 //
 //        /**

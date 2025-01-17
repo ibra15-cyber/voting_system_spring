@@ -17,7 +17,7 @@ public class RegionalPresidentialVoteSummary {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long regionId;
+    private String regionId;
 
     private Long presidentialCandidateId;
 
