@@ -61,7 +61,7 @@ public class EntityDTOMapper {
         voterDTO.setGender(voter.getGender());
         voterDTO.setFirstName(voter.getFirstName());
         voterDTO.setLastName(voter.getLastName());
-        voterDTO.setConstituencyElectoralCode(voter.getPollingStation().getConstituency().getConstituencyElectoralCode());
+//        voterDTO.setConstituencyElectoralCode(voter.getConstituencyCode());
         voterDTO.setVoterPollingStationElectoralCode(voter.getPollingStation().getPollingStationCode());
 
         return voterDTO;

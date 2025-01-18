@@ -28,7 +28,7 @@ public class PresidentialCandidate {
     @Column(unique = true)
     private String politicalParty;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "presidentialCandidate", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vote> voteList;
 
     private Long totalVotesAttained;

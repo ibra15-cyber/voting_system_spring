@@ -30,8 +30,11 @@ public class ParliamentaryCandidateSeed {
 
                 //same district different constituencies
                 //what shows they are from the diff constituency? constituencyId
-                new ParliamentaryCandidateDTO("NPP parliamentary CONST 2", "npp2", Gender.MALE, "A0201", 43,  4324423L, PoliticalParty.NPP, null),
-                new ParliamentaryCandidateDTO("NDC parliamentary CONS 2", "ndc2", Gender.MALE, "A0201", 23,  4322443L, PoliticalParty.NDC, null)
+//                new ParliamentaryCandidateDTO("NPP parliamentary CONST 2", "npp2", Gender.MALE, "A0201", 43,  4324423L, PoliticalParty.NPP, null),
+//                new ParliamentaryCandidateDTO("NDC parliamentary CONS 2", "ndc2", Gender.MALE, "A0201", 23,  4322443L, PoliticalParty.NDC, null),
+
+        new ParliamentaryCandidateDTO("NPP parliamentary CONST 2", "npp2", Gender.MALE, "B0230", 43,  4324423L, PoliticalParty.NPP, null),
+                new ParliamentaryCandidateDTO("NDC parliamentary CONS 2", "ndc2", Gender.MALE, "B0230", 23,  4322443L, PoliticalParty.NDC, null)
 
                 //same region different constituencies
                 //what shows they are in the same region ? nothing, constituency ids are always unique

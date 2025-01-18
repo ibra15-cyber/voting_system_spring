@@ -30,4 +30,6 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
 
     List<Vote> findVotesByPresidentialCandidateAndRegionalCode(PresidentialCandidate presidentialCandidate, String regionalCode);
 
+    List<Vote> findVotesByConstituencyCode(String constituencyCode);
+
 }

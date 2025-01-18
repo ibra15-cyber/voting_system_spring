@@ -28,8 +28,12 @@ public class PollingStationSeed {
             List<PollingStationDTO> pollingStationDTOList = List.of(
                     new PollingStationDTO("METH JSS WORKSHOP BLK HALF-ASSINI", "A0101", "01",  null),
                     new PollingStationDTO("METH NURSERY BLK HALF-ASSINI", "A0101", "02",  null),
-                    new PollingStationDTO("PEACE INTERNATIONAL PRIM SCH COMBODIA HALF-ASSINI", "A0101", "03",  null)
-            );
+                    new PollingStationDTO("PEACE INTERNATIONAL PRIM SCH COMBODIA HALF-ASSINI", "A0101", "03",  null),
+
+                    //create another set of polling stations from other constituency
+                    new PollingStationDTO("PEACE INTERNATIONAL diff", "B0230", "01",  null),
+                    new PollingStationDTO("PEACE INTERNATIONAL diif 2", "B0230", "02",  null)
+                    );
 
 
             pollingStationDTOList.forEach(pollingStationDTO -> {

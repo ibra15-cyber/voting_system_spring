@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Table()
+@Table(name = "constituency_parliamentary_vote_summary")
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

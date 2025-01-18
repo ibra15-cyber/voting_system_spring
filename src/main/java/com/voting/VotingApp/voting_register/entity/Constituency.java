@@ -36,10 +36,6 @@ public class Constituency {
     @JoinColumn(name = "district_electoral_code", referencedColumnName = "districtElectoralCode") // Mapping by code
     private District district;
 
-//    @OneToMany(mappedBy = "constituency", cascade = CascadeType.ALL, orphanRemoval = true)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-//    private List<Voter> voter;
-
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     private List<ParliamentaryCandidate> parliamentaryCandidates;
 
@@ -49,5 +45,10 @@ public class Constituency {
 
 //    @OneToMany(mappedBy = "constituency", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<Vote>  vote;
+
+
+//    @OneToMany(mappedBy = "constituency", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    private List<Voter> voter;
 
 }

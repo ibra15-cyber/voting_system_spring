@@ -52,6 +52,10 @@ public class VoterServiceImp implements VoterService {
                 .orElseThrow(()-> new RuntimeException("Polling Station not found"));
         newVoter.setPollingStation(pollingStation);
 
+        String constituencyCode = pollingStation.getPollingStationCode().substring(0, 5); // easier but to be able to update constituency
+        newVoter.setConstituencyCode(constituencyCode);
+
+
         voterRepository.save(newVoter);
 
         return Response.builder()

@@ -40,7 +40,7 @@ public class ParliamentaryCandidate {
 //    @NotBlank
     private String politicalParty;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "parliamentaryCandidate", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vote> voteList;
 
     @ManyToOne

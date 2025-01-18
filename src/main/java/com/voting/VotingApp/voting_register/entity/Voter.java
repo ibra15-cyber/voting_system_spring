@@ -19,6 +19,7 @@ public class Voter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long voterId;
 
+    @Column(unique=true)
     private Long voterNumber;
 //
 //    @Column(nullable = false)
@@ -41,12 +42,15 @@ public class Voter {
 //    @JoinColumn(name="constituency_code")
 //    private Constituency constituency;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "voter", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumn(name = "vote_id_number", referencedColumnName = "voteId")
     @OnDelete(action = OnDeleteAction.CASCADE) //when a voter is deleted, his vote should be deleted as well
     private Vote vote;
 
     @ManyToOne()
     @JoinColumn(name="polling_station_electoral_code", referencedColumnName = "pollingStationCode")
     private PollingStation pollingStation;
+
+    private String constituencyCode;
 
 }

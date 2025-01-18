@@ -30,7 +30,12 @@ public class VoteSeed {
         List<VoteDTO> voteDTOList = List.of(
                 //same constituency, diff polling station
                 new VoteDTO(10384387L, 10878348L, 10824334L),
-                new VoteDTO(897937493L, 432443L, 10343143L)
+                new VoteDTO(897937493L, 432443L, 10343143L),
+
+
+                new VoteDTO(11111L, 4324423L, 10824334L),
+                new VoteDTO(22222L, 4324423L, 10343143L),
+                new VoteDTO(33333L, 4322443L, 10343143L)
 
 //                new VoteDTO("Karim3", "Toure3", Gender.MALE, "A0101", 35, 343333L, "A010102"),
 //                new VoteDTO("Karim4", "Toure4", Gender.MALE, "A0101", 35, 2223434L, "A010102"),

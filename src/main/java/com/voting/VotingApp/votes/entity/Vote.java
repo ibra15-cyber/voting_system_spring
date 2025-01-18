@@ -26,11 +26,11 @@ public class Vote {
 
     //the parliamentary and presidential candidate voted for
     @ManyToOne
-    @JoinColumn(name="parlimentaryCandidate_id")
+    @JoinColumn(name="parlimentary_Candidate_id", referencedColumnName = "parliamentaryCandidateNumber")
     private ParliamentaryCandidate parliamentaryCandidate;
 
     @ManyToOne
-    @JoinColumn(name="presidentialCandidate_id")
+    @JoinColumn(name="presidentialCandidate_id", referencedColumnName = "presidentialVoterIdNumber")
     private PresidentialCandidate presidentialCandidate;
 
     @ManyToOne
@@ -43,14 +43,16 @@ public class Vote {
     @Column(nullable = false)
     private String regionalCode;
 
-    //just like we have orderItem, and orders, we shd have votes and voterItem aka presidentialCandidate
-    //but the link btw product and order is orderItem
-    //therefore the link between vote (n) and candidate  is ? so a valid vote, vote cast breaks the tie
+}
+
+//just like we have orderItem, and orders, we shd have votes and voterItem aka presidentialCandidate
+//but the link btw product and order is orderItem
+//therefore the link between vote (n) and candidate  is ? so a valid vote, vote cast breaks the tie
 //
 //    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<VoteCast> voteCastList;
 
-    //    @ManyToOne
+//    @ManyToOne
 //    @JoinColumn(name = "constituency-electoral-code", referencedColumnName = "constituencyElectoralCode")
 //    private Constituency constituency; //will be pulled from the parliamentary candidate
 
@@ -60,5 +62,3 @@ public class Vote {
 
 
 
-
-}

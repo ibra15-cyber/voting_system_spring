@@ -63,17 +63,24 @@ public class VoteServiceImp implements VoteService {
                 .orElseThrow(()-> new RuntimeException("Voter not found"));
         newVote.setVoter(voter);
 
-        //no need to do double work, by finding the constituency from the user, we can get that from the constituency candidate
-        //so i can choose to stop sending constituencyId over in DTO
-        PollingStation pollingStation = pollingStationRepository.findPollingStationByVoters(voter) //use the voter to find his    pollingStation
-                .orElseThrow(()-> new RuntimeException("Polling Station not found!"));
-        newVote.setPollingStation(pollingStation);
+
 
         //from the parliamentary candidate a voter is voting for, we can get their constituencyId
         //we could also use the user's constituencyId to double check
         ParliamentaryCandidate parliamentaryCandidate = parliamentaryCandidateRepository.findByParliamentaryCandidateNumber(voteDTO.getParliamentaryCandidateId())
                 .orElseThrow(()-> new RuntimeException("Parliamentary candidate does not exist"));
         newVote.setParliamentaryCandidate(parliamentaryCandidate);
+
+        //no need to do double work, by finding the constituency from the user, we can get that from the constituency candidate
+        //so i can choose to stop sending constituencyId over in DTO
+        PollingStation pollingStation;
+        if (voter.getPollingStation().getConstituency().getConstituencyElectoralCode().equals(parliamentaryCandidate.getConstituency().getConstituencyElectoralCode())) {
+            pollingStation = pollingStationRepository.findPollingStationByVoters(voter) //use the voter to find his    pollingStation
+                    .orElseThrow(() -> new RuntimeException("Polling Station not found!"));
+            newVote.setPollingStation(pollingStation);
+        } else {
+            throw new IllegalArgumentException("Sorry, you don't belong to this constituency, so you can't vote for the candidate");
+        }
 
         PresidentialCandidate presidentialCandidate = presidentialCandidateRepository.findByPresidentialVoterIdNumber(voteDTO.getPresidentialCandidateId())
                 .orElseThrow(()-> new RuntimeException("Presidential candidate does not exist"));
@@ -118,7 +125,7 @@ public class VoteServiceImp implements VoteService {
         parliamentaryCandidate.setTotalVotesAttained(totalConstituencyVotesAttained);
         parliamentaryCandidateRepository.save(parliamentaryCandidate);
 
-        List<Vote> totalVotesCastInAConstituency = voteRepository.findAll();
+        List<Vote> totalVotesCastInAConstituency = voteRepository.findVotesByConstituencyCode(constituencyElectoralCode);
         Long totalConstituencyVotes = (long) totalVotesCastInAConstituency.size();
         Constituency constituency = constituencyRepository.findConstituencyByConstituencyElectoralCode(constituencyElectoralCode).orElseThrow(()-> new RuntimeException("Constituency not found"));
         constituency.setConstituencyTotalVotesCast(totalConstituencyVotes);
@@ -161,7 +168,7 @@ public class VoteServiceImp implements VoteService {
 
         constituencyPresidentialVoteSummary.setConstituencyId(constituency.getConstituencyElectoralCode());
         constituencyPresidentialVoteSummary.setDistrictId(constituency.getDistrict().getDistrictElectoralCode());
-        constituencyPresidentialVoteSummary.setPresidentialCandidateId(presidentialCandidate.getPresidentialCandidateId());
+        constituencyPresidentialVoteSummary.setPresidentialCandidateId(presidentialCandidate.getPresidentialVoterIdNumber());
         constituencyPresidentialVoteSummary.setPresidentialCandidateVoteTotal(totalPC);
 
         constituencyPresidentialVoteSummaryRepository.save(constituencyPresidentialVoteSummary);
@@ -170,7 +177,7 @@ public class VoteServiceImp implements VoteService {
         RegionalPresidentialVoteSummary regionalPresidentialVoteSummary = new RegionalPresidentialVoteSummary();
 
         regionalPresidentialVoteSummary.setRegionId(regionCode);
-        regionalPresidentialVoteSummary.setPresidentialCandidateId(presidentialCandidate.getPresidentialCandidateId());
+        regionalPresidentialVoteSummary.setPresidentialCandidateId(presidentialCandidate.getPresidentialVoterIdNumber());
         regionalPresidentialVoteSummary.setPresidentialCandidateVoteTotal(totalPRR);
 
         regionalPresidentialVoteSummaryRepository.save(regionalPresidentialVoteSummary);
