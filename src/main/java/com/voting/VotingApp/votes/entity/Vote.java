@@ -26,11 +26,11 @@ public class Vote {
 
     //the parliamentary and presidential candidate voted for
     @ManyToOne
-    @JoinColumn(name="parlimentary_Candidate_id", referencedColumnName = "parliamentaryCandidateNumber")
+    @JoinColumn(name="parlimentary_candidate_id", referencedColumnName = "parliamentaryCandidateNumber")
     private ParliamentaryCandidate parliamentaryCandidate;
 
     @ManyToOne
-    @JoinColumn(name="presidentialCandidate_id", referencedColumnName = "presidentialVoterIdNumber")
+    @JoinColumn(name="presidential_candidate_id", referencedColumnName = "presidentialVoterIdNumber")
     private PresidentialCandidate presidentialCandidate;
 
     @ManyToOne

@@ -4,6 +4,7 @@ import com.voting.VotingApp.votes.entity.ConstituencyPresidentialVoteSummary;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ConstituencyPresidentialVoteSummaryRepository extends JpaRepository<ConstituencyPresidentialVoteSummary, Long> {
     //searching constituency alone will not separate btw different candidates in the constituency
@@ -15,4 +16,7 @@ public interface ConstituencyPresidentialVoteSummaryRepository extends JpaReposi
 //    ConstituencyPresidentialVoteSummary findByConstituencyIdAndPresidentialCandidateId(Long constituencyId, Long presidentialId);
 //    List<ConstituencyPresidentialVoteSummary> findByConstituencyIdAndDistrictId(Long constituencyId, Long districtId); //possible using ids because in this case we are using placeholders
 //    List<ConstituencyPresidentialVoteSummary> findAllByConstituencyId(List<Long> constituencyId);
+    boolean existsConstituencyPresidentialVoteSummaryById(Long presidentialCandidateId);
+
+    Optional<ConstituencyPresidentialVoteSummary> findByConstituencyId(String constituencyElectoralCode);
 }

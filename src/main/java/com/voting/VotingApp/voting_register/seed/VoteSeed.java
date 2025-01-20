@@ -31,8 +31,8 @@ public class VoteSeed {
                 //same constituency, diff polling station
                 new VoteDTO(10384387L, 10878348L, 10824334L),
                 new VoteDTO(897937493L, 432443L, 10343143L),
-
-
+//
+//
                 new VoteDTO(11111L, 4324423L, 10824334L),
                 new VoteDTO(22222L, 4324423L, 10343143L),
                 new VoteDTO(33333L, 4322443L, 10343143L)
