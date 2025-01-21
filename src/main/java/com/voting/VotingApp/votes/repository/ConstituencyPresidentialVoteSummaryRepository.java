@@ -16,7 +16,7 @@ public interface ConstituencyPresidentialVoteSummaryRepository extends JpaReposi
 //    ConstituencyPresidentialVoteSummary findByConstituencyIdAndPresidentialCandidateId(Long constituencyId, Long presidentialId);
 //    List<ConstituencyPresidentialVoteSummary> findByConstituencyIdAndDistrictId(Long constituencyId, Long districtId); //possible using ids because in this case we are using placeholders
 //    List<ConstituencyPresidentialVoteSummary> findAllByConstituencyId(List<Long> constituencyId);
-    boolean existsConstituencyPresidentialVoteSummaryById(Long presidentialCandidateId);
+    boolean existsConstituencyPresidentialVoteSummaryByPresidentialCandidateId(Long presidentialCandidateId);
 
-    Optional<ConstituencyPresidentialVoteSummary> findByConstituencyId(String constituencyElectoralCode);
+    Optional<ConstituencyPresidentialVoteSummary> findConstituencyPresidentialVoteSummaryByPresidentialCandidateId(Long presidentialCandidateId);
 }

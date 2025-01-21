@@ -58,17 +58,31 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
                 "WHERE votes.presidential_candidate_id = :presidentialCandidateId AND votes.polling_electoral_code = :pollingStationElectoralCode",
     nativeQuery = true)
     Long totalVotesByPresidentialCandidateAtAPollingStation(@Param("presidentialCandidateId") Long presidentialCandidateId, @Param("pollingStationElectoralCode") String pollingStationElectoralCode);
+
+    @Query(value =
+        "SELECT count(*) " +
+                "FROM votes " +
+                "WHERE votes.presidential_candidate_id = :presidentialCandidateId AND votes.constituency_code = :constituencyCode",
+    nativeQuery = true)
+    Long totalVotesByPresidentialCandidateAtAConstituency(@Param("presidentialCandidateId") Long presidentialCandidateId, @Param("constituencyCode") String constituencyCode);
 //    List<Vote> findVotesByPresidentialCandidateAndConstituencyCode(PresidentialCandidate presidentialCandidate, String constituencyCode);
 
 //    List<Vote> findVotesByPresidentialCandidateAndRegionalCode(PresidentialCandidate presidentialCandidate, String regionalCode);
     @Query(value =
-        "SELECT count(*) as total " +
+        "SELECT  count(*) as total " +
                 "FROM votes " +
-                "WHERE votes.presidential_candidate_Id = :presidentialCandidateId AND votes.regional_code = :regionElectoralCode"
+                "WHERE votes.presidential_candidate_Id = :presidentialCandidateId AND votes.regional_code = :regionElectoralCode "
             , nativeQuery = true)
     Long totalVotesForPresidentialCandidateForARegion(@Param("presidentialCandidateId") Long presidentialCandidateId, @Param("regionElectoralCode") String regionElectoralCode);
 
-//    List<Vote> findVotesByConstituencyCode(String constituencyCode);
+    @Query(value =
+            "SELECT votes.presidential_candidate_Id, count(*) as total " +
+                    "FROM votes " +
+                    "WHERE votes.regional_code = :regionElectoralCode " +
+                    "GROUP BY votes.presidential_candidate_Id", nativeQuery = true)
+    List<Object[]> totalVotesForAllCandidatesInRegion(@Param("regionElectoralCode") String regionElectoralCode);
+
+    //    List<Vote> findVotesByConstituencyCode(String constituencyCode);
     @Query(value =
         "SELECT count(*) " +
                 "FROM votes " +

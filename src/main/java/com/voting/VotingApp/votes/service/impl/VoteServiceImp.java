@@ -11,7 +11,9 @@ import com.voting.VotingApp.voting_register.mapper.EntityDTOMapper;
 import com.voting.VotingApp.voting_register.repository.*;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -118,7 +120,8 @@ public class VoteServiceImp implements VoteService {
 //
         //save votes by constituency
         Long totalVotesCastInAConstituency = voteRepository.totalVotesByConstituency(constituencyElectoralCode);
-        Constituency constituency = constituencyRepository.findConstituencyByConstituencyElectoralCode(constituencyElectoralCode).orElseThrow(()-> new RuntimeException("Constituency not found"));
+        Constituency constituency = constituencyRepository.findConstituencyByConstituencyElectoralCode(constituencyElectoralCode)
+                .orElseThrow(()-> new RuntimeException("Constituency not found"));
         constituency.setConstituencyTotalVotesCast(totalVotesCastInAConstituency);
         constituencyRepository.save(constituency);
 
@@ -128,15 +131,16 @@ public class VoteServiceImp implements VoteService {
         Long totalVotesByPresidentialCandidateAtAPollingStation = voteRepository.totalVotesByPresidentialCandidateAtAPollingStation(presidentialCandidate.getPresidentialVoterIdNumber(), pollingStation.getPollingStationCode());
 
         //total votes got by presidential candidate at a constituency
-        if (constituencyPresidentialVoteSummaryRepository.existsConstituencyPresidentialVoteSummaryById(presidentialCandidate.getPresidentialVoterIdNumber())) {
-            ConstituencyPresidentialVoteSummary existConstituencyPresidentialVoteSummary = constituencyPresidentialVoteSummaryRepository.findByConstituencyId(constituencyElectoralCode).orElseThrow(()-> new RuntimeException("Constituency does not exist"));
-            existConstituencyPresidentialVoteSummary.setPresidentialCandidateVoteTotal(totalVotesByPresidentialCandidateAtAPollingStation);
+        Long totalVotesByPresidentialCandidateAtAConstituency = voteRepository.totalVotesByPresidentialCandidateAtAConstituency(presidentialCandidate.getPresidentialVoterIdNumber(), constituencyElectoralCode);
+        if (constituencyPresidentialVoteSummaryRepository.existsConstituencyPresidentialVoteSummaryByPresidentialCandidateId(presidentialCandidate.getPresidentialVoterIdNumber())) {
+            ConstituencyPresidentialVoteSummary existConstituencyPresidentialVoteSummary = constituencyPresidentialVoteSummaryRepository.findConstituencyPresidentialVoteSummaryByPresidentialCandidateId(presidentialCandidate.getPresidentialVoterIdNumber()).orElseThrow(()-> new RuntimeException("Constituency does not exist"));
+            existConstituencyPresidentialVoteSummary.setPresidentialCandidateVoteTotal(totalVotesByPresidentialCandidateAtAConstituency);
 
             constituencyPresidentialVoteSummaryRepository.save(existConstituencyPresidentialVoteSummary);
         } else  {
             ConstituencyPresidentialVoteSummary newConstituencyPresidentialVoteSummary = new ConstituencyPresidentialVoteSummary();
             newConstituencyPresidentialVoteSummary.setConstituencyId(constituencyElectoralCode);
-            newConstituencyPresidentialVoteSummary.setPresidentialCandidateVoteTotal(totalVotesByPresidentialCandidateAtAPollingStation);
+            newConstituencyPresidentialVoteSummary.setPresidentialCandidateVoteTotal(totalVotesByPresidentialCandidateAtAConstituency);
             newConstituencyPresidentialVoteSummary.setPresidentialCandidateId(presidentialCandidate.getPresidentialVoterIdNumber());
             newConstituencyPresidentialVoteSummary.setDistrictId(constituency.getDistrict().getDistrictElectoralCode());
 
@@ -145,8 +149,8 @@ public class VoteServiceImp implements VoteService {
 
         //save regional presidential vote summary
         Long totalVotesForParticularPresidentialCandidateAtARegion = voteRepository.totalVotesForPresidentialCandidateForARegion(presidentialCandidate.getPresidentialVoterIdNumber(), regionCode);
-        if (regionalPresidentialVoteSummaryRepository.existsByRegionId(regionCode)){
-            RegionalPresidentialVoteSummary existRegionalPresidentialVoteSummary = regionalPresidentialVoteSummaryRepository.findByRegionId(regionCode).orElseThrow(()->new RuntimeException("Regional Presidential Vote Summary not found"));
+        if (regionalPresidentialVoteSummaryRepository.existsRegionalPresidentialVoteSummariesByPresidentialCandidateId(presidentialCandidate.getPresidentialVoterIdNumber())){
+            RegionalPresidentialVoteSummary existRegionalPresidentialVoteSummary = regionalPresidentialVoteSummaryRepository.findByPresidentialCandidateId(presidentialCandidate.getPresidentialVoterIdNumber()).orElseThrow(()-> new RuntimeException("Region does not exist"));;
             existRegionalPresidentialVoteSummary.setPresidentialCandidateVoteTotal(totalVotesForParticularPresidentialCandidateAtARegion);
 
             regionalPresidentialVoteSummaryRepository.save(existRegionalPresidentialVoteSummary);
@@ -155,9 +159,26 @@ public class VoteServiceImp implements VoteService {
             newRegionalPresidentialVoteSummary.setRegionId(regionCode);
             newRegionalPresidentialVoteSummary.setPresidentialCandidateVoteTotal(totalVotesForParticularPresidentialCandidateAtARegion);
             newRegionalPresidentialVoteSummary.setPresidentialCandidateId(presidentialCandidate.getPresidentialVoterIdNumber());
-
+            newRegionalPresidentialVoteSummary.setFirstName(presidentialCandidate.getFirstName());
+            newRegionalPresidentialVoteSummary.setLastName(presidentialCandidate.getLastName());
             regionalPresidentialVoteSummaryRepository.save(newRegionalPresidentialVoteSummary);
         }
+
+
+        //        List<Object[]> results = voteRepository.totalVotesForAllCandidatesInRegion(regionCode);
+//
+//        Map<Long, Long> votesMap = new HashMap<>();
+//        for (Object[] result : results) {
+//            Long candidateId = (Long) result[0];
+//            Long voteCount = (Long) result[1];
+//            votesMap.put(candidateId, voteCount);
+//        }
+//
+//        votesMap.forEach((candidateId, voteCount) -> {
+//            System.out.println(voteCount + "...............voteCount");
+
+//        });
+
 
         //across nation total for presidential candidate
         Long totalVotesByPre = voteRepository.findTotalVotesForPresidentialCandidate(presidentialCandidate.getPresidentialVoterIdNumber());

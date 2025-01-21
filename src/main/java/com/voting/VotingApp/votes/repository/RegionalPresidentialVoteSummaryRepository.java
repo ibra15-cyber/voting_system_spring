@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface RegionalPresidentialVoteSummaryRepository extends JpaRepository<RegionalPresidentialVoteSummary, Long> {
 //    RegionalPresidentialVoteSummary findByRegionIdAndPresidentialCandidateId(Long regionId, Long presidentialId);
 //    findRegionalPresidentialVoteSummariesByRegionIdAndAndPresidentialCandidateId
-    boolean existsByRegionId(String electoralId);
+    boolean existsRegionalPresidentialVoteSummariesByPresidentialCandidateId(Long presidentialCandidateid);
     Optional<RegionalPresidentialVoteSummary> findByRegionId(String regionId);
+    Optional<RegionalPresidentialVoteSummary> findByPresidentialCandidateId(Long presidentialCandidateId);
 }

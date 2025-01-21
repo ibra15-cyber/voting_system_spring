@@ -23,4 +23,8 @@ public class RegionalPresidentialVoteSummary {
 
     private Long presidentialCandidateVoteTotal;
 
+    private String firstName;
+    private String lastName;
+
+
 }
