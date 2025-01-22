@@ -92,7 +92,7 @@ public class EntityDTOMapper {
         presidentialCandidateDTO.setLastName(presidentialCandidate.getLastName());
         presidentialCandidateDTO.setGender(Gender.valueOf(presidentialCandidate.getGender()));
         presidentialCandidateDTO.setAge(presidentialCandidate.getAge());
-        presidentialCandidateDTO.setPoliticalParty(PoliticalParty.valueOf(presidentialCandidate.getPoliticalParty()));
+        presidentialCandidateDTO.setPoliticalParty((presidentialCandidate.getPoliticalParty()));
         presidentialCandidateDTO.setTotalVotesAttain(presidentialCandidate.getTotalVotesAttained());
         presidentialCandidateDTO.setPresidentialIdCardNumber(presidentialCandidate.getPresidentialVoterIdNumber());
 

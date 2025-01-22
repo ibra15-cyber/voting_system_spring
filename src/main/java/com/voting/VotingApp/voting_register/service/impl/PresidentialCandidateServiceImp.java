@@ -33,7 +33,7 @@ public class PresidentialCandidateServiceImp implements PresidentialCandidateSer
         presidentialCandidate.setLastName(presidentialCandidateDTO.getLastName());
         presidentialCandidate.setAge(presidentialCandidateDTO.getAge());
         presidentialCandidate.setGender(presidentialCandidateDTO.getGender().toString());
-        presidentialCandidate.setPoliticalParty(presidentialCandidateDTO.getPoliticalParty().toString());
+        presidentialCandidate.setPoliticalParty(presidentialCandidateDTO.getPoliticalParty());
         presidentialCandidate.setPresidentialVoterIdNumber(presidentialCandidateDTO.getPresidentialIdCardNumber());
 
         presidentialCandidateRepository.save(presidentialCandidate);
@@ -74,7 +74,7 @@ public class PresidentialCandidateServiceImp implements PresidentialCandidateSer
         if (presidentialCandidateDTO.getFirstName() != null) presidentialCandidate.setFirstName(presidentialCandidateDTO.getFirstName());
         if (presidentialCandidateDTO.getLastName() != null) presidentialCandidate.setLastName(presidentialCandidateDTO.getLastName());
         if (presidentialCandidateDTO.getGender() != null) presidentialCandidate.setGender(String.valueOf(presidentialCandidateDTO.getGender()));
-        if (presidentialCandidateDTO.getPoliticalParty() != null) presidentialCandidate.setPoliticalParty(presidentialCandidateDTO.getPoliticalParty().toString());
+        if (presidentialCandidateDTO.getPoliticalParty() != null) presidentialCandidate.setPoliticalParty(presidentialCandidateDTO.getPoliticalParty());
         if (presidentialCandidateDTO.getAge() != null ) presidentialCandidate.setAge(presidentialCandidateDTO.getAge());
 
         presidentialCandidateRepository.save(presidentialCandidate);

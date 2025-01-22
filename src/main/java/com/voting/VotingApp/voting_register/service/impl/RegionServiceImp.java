@@ -61,8 +61,7 @@ public class RegionServiceImp implements RegionService {
 
     @Override
     public Response getRegionById(String regionCode) {
-
-        Region region = regionRepository.findByRegionElectoralCode(regionCode)
+        Region region = regionRepository.findRegionByRegionElectoralCode(regionCode)
                 .orElseThrow(()-> new RuntimeException("region does not exist"));
 
         return Response.builder()
@@ -74,7 +73,7 @@ public class RegionServiceImp implements RegionService {
     @Override
     public Response updateRegion(String regionCode, RegionDTO regionDTO) {
 
-        Region region = regionRepository.findByRegionElectoralCode(regionCode)
+        Region region = regionRepository.findRegionByRegionElectoralCode(regionCode)
                 .orElseThrow(()-> new RuntimeException("region does not exist"));
 
         if(regionDTO.getRegionalCapital() != null) region.setRegionalCapital(regionDTO.getRegionalCapital());
@@ -93,7 +92,7 @@ public class RegionServiceImp implements RegionService {
     @Override
     public Response deleteRegion(String regionCode) {
 
-        Region region = regionRepository.findByRegionElectoralCode(regionCode)
+        Region region = regionRepository.findRegionByRegionElectoralCode(regionCode)
                 .orElseThrow(()-> new RuntimeException("region does not exist"));
 
         regionRepository.delete(region);
@@ -104,8 +103,7 @@ public class RegionServiceImp implements RegionService {
 
     @Override
     public Response getDistrictsByRegion(String regionCode) {
-
-        Region region = regionRepository.findByRegionElectoralCode(regionCode)
+        Region region = regionRepository.findRegionByRegionElectoralCode(regionCode)
                 .orElseThrow(()-> new RuntimeException("region does not exist"));
 
         List<District> districts = districtRepository.findDistrictsByRegion(region);

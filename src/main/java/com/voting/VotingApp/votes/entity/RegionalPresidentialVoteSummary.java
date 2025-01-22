@@ -26,5 +26,9 @@ public class RegionalPresidentialVoteSummary {
     private String firstName;
     private String lastName;
 
+    private String regionName;
+
+    private String color;
+
 
 }

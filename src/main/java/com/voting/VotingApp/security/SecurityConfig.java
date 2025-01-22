@@ -28,7 +28,7 @@ public class SecurityConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(withDefaults())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/presidential-candidate/**", "/region/**", "/product/**", "/order/**", "/pay/**", "/cancel/**", "/success/**", "/home/**").permitAll()
+                        .requestMatchers("/presidential-candidate/**", "/region/**", "/vote/**", "/order/**", "/pay/**", "/cancel/**", "/success/**", "/home/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

@@ -2,6 +2,7 @@ package com.voting.VotingApp.voting_register.dto;
 
 import com.voting.VotingApp.votes.entity.ConstituencyPresidentialVoteSummary;
 import com.voting.VotingApp.votes.entity.DistrictPresidentialVoteSummary;
+import com.voting.VotingApp.votes.entity.RegionalPresidentialVoteSummary;
 import com.voting.VotingApp.votes.entity.Vote;
 import com.voting.VotingApp.votes.repository.DistrictPresidentialVoteSummaryRepository;
 import lombok.Builder;
@@ -28,10 +29,12 @@ public class Response {
     private Long totalVoteCastNationwide;
     private  List<ConstituencyPresidentialVoteSummary> presidentialVoteSummaryByConstituencies;
     private List<DistrictPresidentialVoteSummary> presidentialVoteSummaryByDistricts;
+    private  List<RegionalPresidentialVoteSummary> presidentialVoteSummaryByRegion;
     private PollingStationDTO pollingStationDTO;
     private List<PollingStationDTO> pollingStationDTOList;
     private PresidentialCandidateDTO presidentialCandidateDTO;
     private List<PresidentialCandidateDTO> presidentialCandidateDTOList;
     private List<Vote> listAllVotes;
+
 
 }

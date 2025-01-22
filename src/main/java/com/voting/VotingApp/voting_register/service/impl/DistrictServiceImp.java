@@ -44,7 +44,7 @@ public class DistrictServiceImp implements DistrictService {
         String regionCode = districtDTO.getRegionElectoralCode();
         district.setDistrictElectoralCode(regionCode + districtDTO.getDistrictElectoralCode());
 
-        Region region = regionRepository.findByRegionElectoralCode(regionCode).orElseThrow(()-> new RuntimeException("Region does not exist"));
+        Region region = regionRepository.findRegionByRegionElectoralCode(regionCode).orElseThrow(()-> new RuntimeException("Region does not exist"));
         district.setRegion(region);
 //        district.setRegion();
 ////        district.setRegion(region);

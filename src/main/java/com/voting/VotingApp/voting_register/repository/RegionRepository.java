@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RegionRepository extends JpaRepository<Region, Long> {
-    Optional<Region> findByRegionElectoralCode(String regionElectoralCode);
+    Optional<Region> findRegionByRegionElectoralCode(String regionElectoralCode);
     boolean existsByRegionElectoralCode(String regionElectoralCode);
 }

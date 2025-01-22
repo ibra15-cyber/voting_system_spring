@@ -45,4 +45,9 @@ public class VoteController {
     public ResponseEntity<Response> getPresidentialVoteSummaryByDistrict() {
         return ResponseEntity.status(HttpStatus.OK).body(voteService.getPresidentialVoteSummaryByDistrict());
     }
+
+    @GetMapping("/presidential-summary-by-region")
+    public ResponseEntity<Response> getPresidentialVoteSummaryByRegion() {
+        return ResponseEntity.status(HttpStatus.OK).body(voteService.getPresidentialVoteSummaryByRegion());
+    }
 }
